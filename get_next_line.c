@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/25 13:08:50 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/11/29 13:57:22 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/11/30 17:17:25 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,11 @@ static int	ft_save_fd_buff(const int fd, t_list **fd_lst, char *fd_buff)
 
 	if (ft_strlen(fd_buff) - ft_strlen_c(fd_buff, '\n') > 1)
 	{
-		if (!(new_fd = (t_list*)malloc(sizeof(t_list))))
+		if (!(new_fd = (t_list*)ft_memalloc(sizeof(t_list))))
 			return (1);
-		start = fd_buff + ft_strlen_c(fd_buff, '\n') + 1;
+		start = ft_strchr(fd_buff, '\n') + 1;
 		new_fd->content_size = fd;
 		new_fd->content = ft_strsub(start, 0, ft_strlen(start));
-		new_fd->next = NULL;
 		ft_lstadd_end(fd_lst, new_fd);
 	}
 	free(fd_buff);
@@ -72,10 +71,9 @@ static int	read_to_newline(const int fd, char **fd_buff)
 		if (count == -1)
 			return (1);
 		tmp = *fd_buff;
-		*fd_buff = *fd_buff ? ft_strjoin(*fd_buff, read_b)
-			: ft_strjoin("", read_b);
+		*fd_buff = ft_strjoin(*fd_buff ? *fd_buff : "", read_b);
 		free(tmp);
-		if (ft_strlen_c(read_b, '\n') != ft_strlen(read_b))
+		if (ft_strchr(read_b, '\n'))
 			break ;
 		ft_bzero(read_b, BUFF_SIZE);
 	}
@@ -92,8 +90,7 @@ int			get_next_line(const int fd, char **line)
 		return (-1);
 	*line = NULL;
 	fd_buff = ft_get_fd_buff(fd, &fd_lst);
-	if (!fd_buff
-		|| (fd_buff && (ft_strlen_c(fd_buff, '\n') == ft_strlen(fd_buff))))
+	if (!fd_buff || (fd_buff && !ft_strchr(fd_buff, '\n')))
 		if (read_to_newline(fd, &fd_buff))
 			return (-1);
 	if (!fd_buff)
