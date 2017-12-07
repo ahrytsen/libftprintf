@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/29 16:08:02 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/07 16:18:47 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/07 18:22:35 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,5 @@ int		ft_printf(const char * restrict format, ...)
 		format++;
 	}
 	write(1, res, ft_strlen(res));
-	return (utf8len(res) + 1);
+	return (utf8len(res));
 }
