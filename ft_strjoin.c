@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/01 14:47:51 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/11/04 14:39:46 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/07 16:19:15 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,20 @@
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	j;
+	size_t	len;
 	char	*new_string;
 
 	j = 0;
-	if (!s1 || !s2 || !(new_string = ft_strnew(ft_strlen(s1) + ft_strlen(s2))))
+	len = 0;
+	if (s1)
+		len += ft_strlen(s1);
+	if (s2)
+		len += ft_strlen(s2);
+	if (!(new_string = ft_strnew(len)))
 		return (NULL);
-	while (*s1)
+	while (s1 && *s1)
 		new_string[j++] = *s1++;
-	while (*s2)
+	while (s2 && *s2)
 		new_string[j++] = *s2++;
 	new_string[j] = 0;
 	return (new_string);

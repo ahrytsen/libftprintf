@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/25 13:08:50 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/11/30 17:17:25 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/07 16:29:43 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static int	read_to_newline(const int fd, char **fd_buff)
 		if (count == -1)
 			return (1);
 		tmp = *fd_buff;
-		*fd_buff = ft_strjoin(*fd_buff ? *fd_buff : "", read_b);
+		*fd_buff = ft_strjoin(*fd_buff, read_b);
 		free(tmp);
 		if (ft_strchr(read_b, '\n'))
 			break ;
