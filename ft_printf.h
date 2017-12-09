@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 19:54:49 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/09 20:43:06 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/09 20:50:47 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,3 @@ typedef struct	s_arg
 int				ft_printf(const char *restrict format, ...);
 
 #endif
-
-
-
-
-
-
-
