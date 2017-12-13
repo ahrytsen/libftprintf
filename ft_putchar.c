@@ -6,13 +6,13 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/28 05:57:42 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/12 18:13:53 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/13 20:27:23 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_putchar(t_wint c)
+int	ft_putchar(int c)
 {
 	if (c <= 0x7F)
 		write(1, &c, 1);

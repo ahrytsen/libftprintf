@@ -6,33 +6,28 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/29 16:08:02 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/13 18:21:36 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/13 21:25:40 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
 char		g_flags[] = "#0-+ ";
-char		*g_len[] =
-{
-	"hh", "ll", "h", "l", "j", "z", "L", NULL
-};
+char		*g_len[] = {"hh", "ll", "h", "l", "j", "z", "L", NULL};
 t_conv	g_phelper[] =
 {
-	{"s", &ft_asciistr},
-	{"S", &ft_unistr},
-	{"p", &ft_pointer},
+	{"sS", &ft_getstr},
 	{"di", &ft_decimal},
+	/*{"pxX", &ft_hex},
 	{"D", &ft_double},
 	{"oO", &ft_octal},
 	{"uU", &ft_unsig},
-	{"xX", &ft_hex},
 	{"cC", ft_symbol},
 	{"n", },
 	{"eE", },
 	{"fF", },
 	{"gG", },
-	{"aA", },
+	{"aA", },*/
 	{NULL, NULL}
 };
 t_color		g_colors[] =
@@ -127,13 +122,26 @@ char				*ft_arg_to_str(va_list *ap, t_arg *arg)
 	char	*res;
 	char	*tmp;
 	int		i;
+	int		len;
 
 	res = NULL;
 	i = 0;
 	while (!ft_strchr(g_phelper[i].conv, arg->specifier) && g_phelper[i].conv)
 		i++;
 	tmp = g_phelper[i].conv ? g_phelper[i].ft_phelper(ap, arg) : ft_undef(arg);
-
+	arg->width < 0 ? arg->width *= -1 : 0;
+	if ((len = ft_strlen(tmp)) < arg->width)
+	{
+		res = (char*)malloc(sizeof(char) * (arg->width - len) + 1);
+		((!ft_strchr(arg->flags, '-') || arg->width < 0)
+		 && ft_strchr(arg->flags, '0') && !arg->is_prec) ?
+			ft_memset(res, '0', arg->width - len)
+			: ft_memset(res, ' ', arg->width - len);
+		res = ft_strchr(arg->flags, '-') ? ft_strextend(tmp, res)
+			: ft_strextend(res, tmp);
+	}
+	else
+		res = tmp;
 	return (res);
 }
 
