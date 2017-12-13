@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 19:54:49 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/09 20:50:47 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/13 18:15:54 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,28 @@
 # include <stdarg.h>
 # include "libft.h"
 
-typedef char	*(*t_phelp)();
-
-typedef enum
+typedef struct	s_color
 {
-	s = 0, S, p, di, D, oO, u, U, xX, c, C, n, eE, fF, gG, aA, count_convs
-}	t_convs;
-typedef enum
+	char	*color_name;
+	char	*color_cod;
+}				t_color;
+typedef struct	s_conv
 {
-	hh = 0, h, l, ll, j, z, L, count_lflags
-}	t_lflags;
+	char *conv;
+	char *(*ft_phelper)();
+}				t_conv;
 typedef struct	s_arg
 {
 	char	flags[6];
 	int		width;
-	int		is_precision;
-	int		precision;
-	char	length[3];
+	int		is_prec;
+	int		prec;
+	char	*len;
 	char	specifier;
 }				t_arg;
 
-int				ft_printf(const char *restrict format, ...);
+int				ft_printf(const char *format, ...);
+char			*ft_asciistr(va_list ap, t_arg *arg);
+char			*ft_undef(t_arg *arg);
 
 #endif
