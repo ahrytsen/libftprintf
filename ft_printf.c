@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/29 16:08:02 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/13 21:25:40 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/14 20:02:46 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@ char		*g_len[] = {"hh", "ll", "h", "l", "j", "z", "L", NULL};
 t_conv	g_phelper[] =
 {
 	{"sS", &ft_getstr},
-	{"di", &ft_decimal},
+	{"diXxOo", &ft_decimal},
 	/*{"pxX", &ft_hex},
 	{"D", &ft_double},
 	{"oO", &ft_octal},
 	{"uU", &ft_unsig},
-	{"cC", ft_symbol},
+	{"cC", &ft_symbol},
 	{"n", },
 	{"eE", },
 	{"fF", },
@@ -52,17 +52,6 @@ t_color		g_colors[] =
 	{"{b_white}", "\033[107m"}, {NULL, NULL}
 };
 
-size_t				ft_utf8len(char *s)
-{
-	size_t len;
-
-	len = 0;
-	while (*s)
-		if ((*s++ & 0xC0) != 0x80)
-			len++;
-	return (len);
-}
-
 static const char	*ft_get_format(va_list *ap, const char *format, t_arg *arg)
 {
 	int	i;
@@ -87,7 +76,7 @@ static const char	*ft_get_format(va_list *ap, const char *format, t_arg *arg)
 		i++;
 	arg->len = g_len[i];
 	format += arg->len ? ft_strlen(arg->len) : 0;
-	arg->specifier = *format;
+	arg->spec = *format;
 	return (*format ? format + 1 : format);
 }
 
@@ -117,31 +106,44 @@ static const char	*ft_get_color(const char *format, char **res)
 	return (*format ? format + 1 : format);
 }
 
-char				*ft_arg_to_str(va_list *ap, t_arg *arg)
+static char			*ft_width_flags(char *res, t_arg *arg)
+{
+	char	*tmp;
+	int		len;
+
+	if ((len = ft_strlen(res)) < MOD(arg->width))
+	{
+		tmp = (char*)malloc(sizeof(char) * (MOD(arg->width) - len) + 1);
+		(!ft_strchr(arg->flags, '-') && arg->width >= 0
+		&& ft_strchr(arg->flags, '0') && !arg->is_prec) ?
+			ft_memset(tmp, '0', MOD(arg->width) - len)
+			: ft_memset(tmp, ' ', MOD(arg->width) - len);
+		ft_strchr(arg->flags, ' ') && ft_strchr("di", arg->spec)
+			? *tmp = ' ' : 0;
+		ft_strchr(arg->flags, '+') && ft_strchr("di", arg->spec)
+			? *tmp = '+' : 0;
+		(ft_strchr(arg->flags, '#') || ft_strchr("p", arg->spec))
+			&& (ft_strchr("x", arg->spec) || ft_strchr("X", arg->spec))
+			? *tmp = '+' : 0;
+		res = ft_strchr(arg->flags, '-') || arg->width < 0
+			? ft_strextend(res, tmp) : ft_strextend(tmp, res);
+	}
+	return (res);
+}
+
+static char			*ft_arg_to_str(va_list *ap, t_arg *arg)
 {
 	char	*res;
-	char	*tmp;
+	//char	*tmp;
 	int		i;
-	int		len;
 
 	res = NULL;
 	i = 0;
-	while (!ft_strchr(g_phelper[i].conv, arg->specifier) && g_phelper[i].conv)
+	while ( g_phelper[i].conv && !ft_strchr(g_phelper[i].conv, arg->spec))
 		i++;
-	tmp = g_phelper[i].conv ? g_phelper[i].ft_phelper(ap, arg) : ft_undef(arg);
-	arg->width < 0 ? arg->width *= -1 : 0;
-	if ((len = ft_strlen(tmp)) < arg->width)
-	{
-		res = (char*)malloc(sizeof(char) * (arg->width - len) + 1);
-		((!ft_strchr(arg->flags, '-') || arg->width < 0)
-		 && ft_strchr(arg->flags, '0') && !arg->is_prec) ?
-			ft_memset(res, '0', arg->width - len)
-			: ft_memset(res, ' ', arg->width - len);
-		res = ft_strchr(arg->flags, '-') ? ft_strextend(tmp, res)
-			: ft_strextend(res, tmp);
-	}
-	else
-		res = tmp;
+	res = g_phelper[i].conv ? g_phelper[i].ft_phelper(ap, arg) : ft_undef(arg);
+	arg->is_prec && ft_strchr("sS", arg->spec)? res[arg->prec] = 0 : 0;
+	res = ft_width_flags(res, arg);
 	return (res);
 }
 

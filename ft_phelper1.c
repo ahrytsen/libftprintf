@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 14:55:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/13 21:06:18 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/14 18:36:32 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*ft_getstr(va_list *ap, t_arg *arg)
 {
-	if (arg->specifier == 's')
+	if (arg->spec == 's')
 		return (ft_strdup(va_arg(*ap, char*)));
 	return (0);
 }
@@ -22,28 +22,31 @@ char	*ft_getstr(va_list *ap, t_arg *arg)
 char	*ft_decimal(va_list *ap, t_arg *arg)
 {
 	char	*res;
-	int		num;
+	long	num;
 	char	*tmp;
+	int		base;
 
-	num = va_arg(*ap, int);
-	res = ft_itoa(num);
+	num = ft_strchr("di", arg->spec) ? va_arg(*ap, int) : va_arg(*ap, long);
+	base = (arg->spec == 'X' || arg->spec == 'x') ? 16 : 10;
+	base = (arg->spec == 'O' || arg->spec == 'o') ? 8 : base;
+	res = ft_itoa_base(num, base, 'A' + arg->spec -ft_toupper(arg->spec));
 	tmp = res;
-	if (num >= 0)
+	if (num >= 0 && MOD(arg->width) <= (int)ft_strlen(res) && base == 10)
 	{
 		if (ft_strchr(arg->flags, '+'))
-			res = ft_strjoin(tmp, "+");
+			res = ft_strjoin("+", tmp);
 		else if (ft_strchr(arg->flags, ' '))
-			res = ft_strjoin(tmp, " ");
-//		free(tmp);
+			res = ft_strjoin(" ", tmp);
+		free(tmp);
 	}
 	return (res);
 }
 
 char	*ft_undef(t_arg *arg)
 {
-	char *lol;
+	char *res;
 
-	lol = NULL;
-	arg->width = 1;
-	return (lol);
-	}
+	res = ft_memalloc(2);
+	*res = arg->spec;
+	return (res);
+}

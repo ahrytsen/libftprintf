@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 19:54:49 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/13 20:56:04 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/14 14:27:19 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdarg.h>
 # include "libft.h"
 
+# define MOD(a)(a >= 0 ? a : -a)
 typedef struct	s_color
 {
 	char	*color_name;
@@ -33,7 +34,7 @@ typedef struct	s_arg
 	int		is_prec;
 	int		prec;
 	char	*len;
-	char	specifier;
+	char	spec;
 }				t_arg;
 
 int				ft_printf(const char *format, ...);
@@ -42,13 +43,3 @@ char			*ft_decimal(va_list *ap, t_arg *arg);
 char			*ft_undef(t_arg *arg);
 
 #endif
-
-
-
-
-
-
-
-
-
-
