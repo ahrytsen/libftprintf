@@ -6,15 +6,16 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/29 16:08:02 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/15 14:52:38 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/15 22:47:11 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
+t_buf		g_buf;
 char		g_flags[] = "#0-+ ";
 char		*g_len[] = {"hh", "ll", "h", "l", "j", "z", "L", NULL};
-t_conv	g_phelper[] =
+t_conv		g_phelper[] =
 {
 	{"sS", &ft_getstr},
 	{"diXxOo", &ft_int},
@@ -52,58 +53,56 @@ t_color		g_colors[] =
 	{"{b_white}", "\033[107m"}, {NULL, NULL}
 };
 
-static const char	*ft_get_format(va_list *ap, const char *format, t_arg *arg)
+static const char	*ft_get_format(va_list *ap, const char **format, t_arg *arg)
 {
 	int	i;
 
 	i = 0;
 	ft_bzero(arg, sizeof(t_arg));
-	while (ft_strchr(g_flags, *format) && i < 6)
-		if (!ft_strchr(arg->flags, *format))
-			arg->flags[i++] = *format++;
+	while (ft_strchr(g_flags, **format) && i < 6)
+		if (!ft_strchr(arg->flags, **format))
+			arg->flags[i++] = *(*format)++;
 		else
-			format++;
-	if ((*format >= '0' && *format <= '9') || *format == '*')
-		arg->width = (*format == '*') ? va_arg(*ap, int) : ft_atoi(format);
-	while ((*format >= '0' && *format <= '9') || *format == '*')
+			(*format)++;
+	if ((**format >= '0' && **format <= '9') || **format == '*')
+		arg->width = (**format == '*') ? va_arg(*ap, int) : ft_atoi(*format);
+	while ((**format >= '0' && **format <= '9') || **format == '*')
 		format++;
-	if (*format == '.' && ++arg->is_prec)
-		arg->prec = (*++format == '*') ? va_arg(*ap, int) : ft_atoi(format);
-	while ((*format >= '0' && *format <= '9') || *format == '*')
-		format++;
+	if (**format == '.' && ++arg->is_prec)
+		arg->prec = (*++(*format) == '*') ? va_arg(*ap, int) : ft_atoi(format);
+	while ((**format >= '0' && **format <= '9') || **format == '*')
+		(*format)++;
 	i = 0;
-	while (g_len[i] && ft_strncmp(g_len[i], format, ft_strlen(g_len[i])))
+	while (g_len[i] && !ft_strncmp(g_len[i], *format, ft_strlen(g_len[i])))
 		i++;
 	arg->len = g_len[i];
-	format += arg->len ? ft_strlen(arg->len) : 0;
+	*format += arg->len ? ft_strlen(arg->len) : 0;
 	arg->spec = *format;
-	return (*format ? format + 1 : format);
+	**format ? (*format)++ : 0;
 }
 
-static const char	*ft_get_color(const char *format, char **res)
+static void			ft_get_color(const char **format)
 {
-	int		i;
-	char	*tmp;
+	int	i;
+	int	j;
 
 	i = 0;
-	tmp = *res;
+	j = 0;
 	while (g_colors[i].color_name
-		&& ft_strncmp(format, g_colors[i].color_name,
+		&& ft_strncmp(*format, g_colors[i].color_name,
 						ft_strlen(g_colors[i].color_name)))
 		i++;
 	if (g_colors[i].color_name)
 	{
-		*res = ft_strjoin(*res, g_colors[i].color_cod);
-		format += ft_strlen_c(format, '}');
-		free(tmp);
+		while (g_colors[i].color_cod[j] && g_buf)
+			if (g_buf->len == PBS - 1)
+				g_buf = (g_buf->next = ft_newbuf()) ? g_buf->next : NULL;
+			else
+				g_buf->str[g_buf->len++] = g_colors[i].color_cod[j++];
+		*format += ft_strlen_c(*format, '}');
 	}
 	else
-	{
-		i = ft_strlen_c(format, '%');
-		*res = ft_strextend(*res, ft_strsub(format, 0, i));
-		format += i;
-	}
-	return (*format ? format + 1 : format);
+		g_buf->str[g_buf->len++] = **format++;
 }
 
 static char			*ft_prefix(char **res, t_arg *arg)
@@ -133,10 +132,10 @@ static char			*ft_prefix(char **res, t_arg *arg)
 	return (pref);
 }
 
-static char			*ft_arg_to_str(va_list *ap, t_arg *arg)
+static void			ft_arg_to_str(va_list *ap, t_arg *arg)
 {
-	char	*res;
-	char	*tmp;
+	t_buf	*res;
+	t_buf	tmp;
 	char	*pref;
 	int		i;
 
@@ -144,47 +143,59 @@ static char			*ft_arg_to_str(va_list *ap, t_arg *arg)
 	while ( g_phelper[i].conv && !ft_strchr(g_phelper[i].conv, arg->spec))
 		i++;
 	res = g_phelper[i].conv ? g_phelper[i].ft_phelper(ap, arg) : ft_undef(arg);
-	arg->is_prec && ft_strchr("sS", arg->spec) ? res[arg->prec] = 0 : 0;
+	arg->is_prec && ft_strchr("sS", arg->spec) ? res.str[arg->prec] = 0 : 0;
 	pref = ft_prefix(&res, arg);
-	tmp = ((i = ft_strlen(res) + (pref ? ft_strlen(pref) : 0)) < MOD(arg->width))
+	tmp.str = ((i = res->len + (pref ? ft_strlen(pref) : 0)) < MOD(arg->width))
 		? (char*)malloc(sizeof(char) * (MOD(arg->width) - i) + 1) : NULL;
-	if (tmp)
+	if (tmp.str)
 		(!ft_strchr(arg->flags, '-') && arg->width >= 0
 		 && ft_strchr(arg->flags, '0') && !arg->is_prec)
-			? ft_memset(tmp, '0', MOD(arg->width) - i)
-			: ft_memset(tmp, ' ', MOD(arg->width) - i);
+			? ft_memset(tmp.str, '0', MOD(arg->width) - i)
+			: ft_memset(tmp.str, ' ', MOD(arg->width) - i);
+	tmp.len = tmp.str ? ft_strlen(tmp.str) : 0;
 	if (tmp && *tmp == '0')
-		return (ft_strextend(pref, ft_strextend(tmp, res)));
+		ft_pbufext(&tmp, res->str)
+		ft_pbufext(&res, ft_strextend(&tmp, res->str)));
 	res = ft_strextend(pref, res);
 	return ((ft_strchr(arg->flags, '-') || arg->width < 0)
 			? ft_strextend(res, tmp) : ft_strextend(tmp, res));
 }
 
+t_buf				*ft_newbuf()
+{
+	t_buf	*new_buf;
+
+	if (!(new_buf = ft_memalloc(sizeof(t_buf))))
+		return (NULL);
+	if (!(new_buf.str = malloc(PBS)))
+	{
+		free(new_buf);
+		return (NULL);
+	}
+	return (new_buf);
+}
+
 int					ft_printf(const char *format, ...)
 {
-	char	*res;
 	t_arg	arg;
 	va_list	ap;
-	int		ret;
-	int		tmp;
+	t_buf	*buf_head;
 
-	res = format ? ft_memalloc(1) : NULL;
+	g_buf = format ? ft_newbuf() : NULL;
 	format ? va_start(ap, format) : 0;
-	while (res && *format)
-		if (*format == '%' && (format = ft_get_format(&ap, format + 1, &arg)))
-			res = ft_strextend(res, ft_arg_to_str(&ap, &arg));
-		else if (*format == '{')
-			format = ft_get_color(format, &res);
-		else
+	buf_head = g_buf;
+	while (g_buf && *format)
+		if (g_buf>len == PBS - 1)
+			g_buf = (g_buf->next = ft_newbuf()) ? g_buf->next : NULL;
+		else if (*format == '%')
 		{
-			ret = ft_strlen_c(format, '%');
-			tmp = ft_strlen_c(format, '{');
-			tmp < ret ? ret = tmp : 0;
-			res = ft_strextend(res, ft_strsub(format, 0, ret));
-			format += ret;
+			ft_get_format(&ap, &(++format), &arg);
+			ft_arg_to_buff(&ap, &arg);
 		}
+		else if (*format == '{')
+			ft_get_color(&format);
+		else
+			g_buf->str[g_buf->len++] = *format++;
 	format ? va_end(ap) : 0;
-	ret = res ? write(1, res, ft_strlen(res)) : -1;
-	free(res);
-	return (ret);
+	return (ft_print(buf_head));
 }
