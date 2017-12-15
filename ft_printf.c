@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/29 16:08:02 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/14 20:02:46 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/15 14:52:38 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char		*g_len[] = {"hh", "ll", "h", "l", "j", "z", "L", NULL};
 t_conv	g_phelper[] =
 {
 	{"sS", &ft_getstr},
-	{"diXxOo", &ft_decimal},
+	{"diXxOo", &ft_int},
 	/*{"pxX", &ft_hex},
 	{"D", &ft_double},
 	{"oO", &ft_octal},
@@ -106,45 +106,58 @@ static const char	*ft_get_color(const char *format, char **res)
 	return (*format ? format + 1 : format);
 }
 
-static char			*ft_width_flags(char *res, t_arg *arg)
+static char			*ft_prefix(char **res, t_arg *arg)
 {
-	char	*tmp;
-	int		len;
+	char *pref;
 
-	if ((len = ft_strlen(res)) < MOD(arg->width))
+	pref = NULL;
+	if (ft_strchr("di", arg->spec) && **res != '-')
 	{
-		tmp = (char*)malloc(sizeof(char) * (MOD(arg->width) - len) + 1);
-		(!ft_strchr(arg->flags, '-') && arg->width >= 0
-		&& ft_strchr(arg->flags, '0') && !arg->is_prec) ?
-			ft_memset(tmp, '0', MOD(arg->width) - len)
-			: ft_memset(tmp, ' ', MOD(arg->width) - len);
-		ft_strchr(arg->flags, ' ') && ft_strchr("di", arg->spec)
-			? *tmp = ' ' : 0;
-		ft_strchr(arg->flags, '+') && ft_strchr("di", arg->spec)
-			? *tmp = '+' : 0;
-		(ft_strchr(arg->flags, '#') || ft_strchr("p", arg->spec))
-			&& (ft_strchr("x", arg->spec) || ft_strchr("X", arg->spec))
-			? *tmp = '+' : 0;
-		res = ft_strchr(arg->flags, '-') || arg->width < 0
-			? ft_strextend(res, tmp) : ft_strextend(tmp, res);
+		if (ft_strchr(arg->flags, '+') && **res != '-')
+			pref = ft_strextend(ft_strdup("+"), *res);
+		else if (ft_strchr(arg->flags, ' ') && **res != '-')
+			pref = ft_strextend(ft_strdup(" "), *res);
+		else if (**res == '-')
+		{
+			pref = *res;
+			*res = ft_strsub(*res, 1, ft_strlen(*res + 1));
+			free(pref);
+			pref = ft_strdup("-");
+		}
+		return (pref);
 	}
-	return (res);
+	if (ft_strchr("xX", arg->spec) && ft_strchr(arg->flags, '#'))
+		pref = arg->spec == 'X' ? ft_strdup("0X") : ft_strdup("0x");
+	if (ft_strchr("oOb", arg->spec) && ft_strchr(arg->flags, '#'))
+		pref = arg->spec == 'b' ? ft_strdup("b") : ft_strdup("0");
+	return (pref);
 }
 
 static char			*ft_arg_to_str(va_list *ap, t_arg *arg)
 {
 	char	*res;
-	//char	*tmp;
+	char	*tmp;
+	char	*pref;
 	int		i;
 
-	res = NULL;
 	i = 0;
 	while ( g_phelper[i].conv && !ft_strchr(g_phelper[i].conv, arg->spec))
 		i++;
 	res = g_phelper[i].conv ? g_phelper[i].ft_phelper(ap, arg) : ft_undef(arg);
-	arg->is_prec && ft_strchr("sS", arg->spec)? res[arg->prec] = 0 : 0;
-	res = ft_width_flags(res, arg);
-	return (res);
+	arg->is_prec && ft_strchr("sS", arg->spec) ? res[arg->prec] = 0 : 0;
+	pref = ft_prefix(&res, arg);
+	tmp = ((i = ft_strlen(res) + (pref ? ft_strlen(pref) : 0)) < MOD(arg->width))
+		? (char*)malloc(sizeof(char) * (MOD(arg->width) - i) + 1) : NULL;
+	if (tmp)
+		(!ft_strchr(arg->flags, '-') && arg->width >= 0
+		 && ft_strchr(arg->flags, '0') && !arg->is_prec)
+			? ft_memset(tmp, '0', MOD(arg->width) - i)
+			: ft_memset(tmp, ' ', MOD(arg->width) - i);
+	if (tmp && *tmp == '0')
+		return (ft_strextend(pref, ft_strextend(tmp, res)));
+	res = ft_strextend(pref, res);
+	return ((ft_strchr(arg->flags, '-') || arg->width < 0)
+			? ft_strextend(res, tmp) : ft_strextend(tmp, res));
 }
 
 int					ft_printf(const char *format, ...)

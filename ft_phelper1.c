@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 14:55:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/14 18:36:32 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/15 15:23:01 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 
 char	*ft_getstr(va_list *ap, t_arg *arg)
 {
+	char	*s;
+
 	if (arg->spec == 's')
-		return (ft_strdup(va_arg(*ap, char*)));
+		return ((s = va_arg(*ap, char*)) ? ft_strdup(s) : ft_strdup("(null)"));
 	return (0);
 }
 
-char	*ft_decimal(va_list *ap, t_arg *arg)
+char	*ft_int(va_list *ap, t_arg *arg)
 {
 	char	*res;
 	long	num;

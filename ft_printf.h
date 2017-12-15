@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 19:54:49 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/14 14:27:19 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/15 12:35:18 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct	s_arg
 
 int				ft_printf(const char *format, ...);
 char			*ft_getstr(va_list *ap, t_arg *arg);
-char			*ft_decimal(va_list *ap, t_arg *arg);
+char			*ft_int(va_list *ap, t_arg *arg);
 char			*ft_undef(t_arg *arg);
 
 #endif
