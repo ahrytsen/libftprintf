@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/14 17:56:52 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/15 15:26:06 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/16 19:54:03 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,14 @@ char		*ft_itoa_base(long value, int base, char st_l)
 	int				size;
 	char			*res;
 
-	val = value < 0 (unsigned)(value * -1) : value;
+	val = value < 0 ? (value * -1) : value;
 	size = ft_getsize(value, base);
 	if (!(res = (char*)malloc(sizeof(char) * size--)))
 		return (NULL);
 	res[size--] = 0;
 	if (base == 10 && value < 0)
 		res[0] = '-';
-	val *= val < 0 ? -1 : 1;
-	while (val >= base)
+	while (val >= (unsigned long)base)
 	{
 		res[size] = (val % base >= 10) ? val % base + st_l - 10 :
 			val % base + '0';
@@ -50,3 +49,13 @@ char		*ft_itoa_base(long value, int base, char st_l)
 		val % base + '0';
 	return (res);
 }
+
+
+
+
+
+
+
+
+
+

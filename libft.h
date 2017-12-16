@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/28 05:35:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/14 18:27:14 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/16 19:52:11 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,9 @@ t_list			*ft_lstpush_front(t_list **lst, void const *content,
 								size_t content_size);
 t_list			*ft_lstsplit(char const *s, char c);
 size_t			ft_strlen_c(char const *s, char c);
+size_t			ft_strulen(int *s);
 char			*ft_strextend(char *s1, char *s2);
-char			*ft_itoa_base(int value, int base, char st_l);
+char			*ft_itoa_base(long value, int base, char st_l);
 /*
 **              Get_Next_Line
 */
