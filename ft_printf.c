@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/29 16:08:02 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/18 16:15:35 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/18 22:31:36 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,8 @@ char		*g_len[] = {"hh", "ll", "h", "l", "j", "z", "L", NULL};
 t_conv		g_phelper[] =
 {
 	{"sS", &ft_str},
-	{"diXxOo", &ft_int},
-	/*{"pxX", &ft_hex},
-	{"D", &ft_double},
-	{"oO", &ft_octal},
-	{"uU", &ft_unsig},
-	{"cC", &ft_symbol},
+	{"diDUu", &ft_int},
+/*	{"pxXoObB", &ft_base},
 	{"n", },
 	{"eE", },
 	{"fF", },
@@ -143,7 +139,8 @@ int				ft_printf(const char *format, ...)
 			format = ft_get_format(&ap, format + 1, &arg);
 			while ( g_phelper[i].conv && !ft_strchr(g_phelper[i].conv, arg.spec))
 				i++;
-			g_phelper[i].conv ? g_phelper[i].ft_phelper(&ap, &arg) : ft_undef(&arg);
+			g_phelper[i].conv ? g_phelper[i].ft_phelper(&ap, &arg)
+				: ft_undef(&ap, &arg);
 		}
 		else if (*format == '{')
 			ft_get_color(&format);

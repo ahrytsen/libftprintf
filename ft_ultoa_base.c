@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/14 17:56:52 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/18 16:03:07 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/18 17:07:29 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	ft_getsize(size_t value, int base)
 	int	res;
 
 	res = 0;
-	while (value >= base)
+	while (value >= (size_t)base)
 	{
 		value /= base;
 		res++;
