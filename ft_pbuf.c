@@ -6,11 +6,33 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/16 18:18:01 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/16 20:22:56 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/18 15:17:57 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+ssize_t	ft_print_buf(t_buf *buf)
+{
+	ssize_t	ret;
+	t_buf	*tmp;
+
+	ret = 0;
+	while (g_buf && buf)
+	{
+		write(1, buf->str, buf->len);
+		ret += buf->len;
+		buf = buf->next;
+	}
+	while (buf)
+	{
+		free(buf->str);
+		tmp = buf;
+		buf = buf->next;
+		free(tmp);
+	}
+	return (g_buf ? ret : -1);
+}
 
 void	ft_putchar_buf(int c)
 {

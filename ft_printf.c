@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/29 16:08:02 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/16 21:34:18 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/18 16:15:35 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,11 @@ static const char	*ft_get_format(va_list *ap, const char *format, t_arg *arg)
 		else
 			format++;
 	if ((*format >= '0' && *format <= '9') || *format == '*')
-		arg->width = (*format == '*') ? va_arg(*ap, int) : ft_atoi(format);
+		arg->width = (*format == '*') ? va_arg(*ap, int) : ft_atol(format);
 	while ((*format >= '0' && *format <= '9') || *format == '*')
 		format++;
 	if (*format == '.' && ++arg->is_prec)
-		arg->prec = (*++format == '*') ? va_arg(*ap, int) : ft_atoi(format);
+		arg->prec = (*++format == '*') ? va_arg(*ap, int) : ft_atol(format);
 	while ((*format >= '0' && *format <= '9') || *format == '*')
 		format++;
 	i = 0;
@@ -81,7 +81,7 @@ static const char	*ft_get_format(va_list *ap, const char *format, t_arg *arg)
 	return (*format ? ++format : format);
 }
 
-static void	ft_get_color(const char **format)
+static void			ft_get_color(const char **format)
 {
 	int	i;
 
@@ -125,24 +125,8 @@ static void	ft_get_color(const char **format)
 		pref = arg->spec == 'b' ? ft_strdup("b") : ft_strdup("0");
 	return (pref);
 	}*/
-static ssize_t	ft_print_buf(t_buf *buf)
-{
-	ssize_t ret;
 
-	ret = -1;
-	if (!g_buf)
-		return (ret);
-	ret = 0;
-	while(buf)
-	{
-		write(1, buf->str, buf->len);
-		ret += buf->len;
-		buf = buf->next;
-	}
-	return (ret);
-}
-
-int			ft_printf(const char *format, ...)
+int				ft_printf(const char *format, ...)
 {
 	t_arg	arg;
 	va_list	ap;

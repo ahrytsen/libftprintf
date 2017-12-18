@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/28 05:35:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/16 19:52:11 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/18 16:13:00 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,12 @@
 # include <sys/types.h>
 # include <sys/uio.h>
 
+/*
+**				Get_Next_Line
+*/
 # define BUFF_SIZE 32
 
+int				get_next_line(const int fd, char **line);
 /*
 **				Part 1 - Libc functions
 */
@@ -108,10 +112,7 @@ t_list			*ft_lstsplit(char const *s, char c);
 size_t			ft_strlen_c(char const *s, char c);
 size_t			ft_strulen(int *s);
 char			*ft_strextend(char *s1, char *s2);
-char			*ft_itoa_base(long value, int base, char st_l);
-/*
-**              Get_Next_Line
-*/
-int				get_next_line(const int fd, char **line);
+char			*ft_ultoa_base(long value, int base, char st_l, char is_unsigned);
+long			ft_atol(const char *str);
 
 #endif
