@@ -1,47 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoa_base.c                                     :+:      :+:    :+:   */
+/*   ft_ltoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/14 17:56:52 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/19 13:43:37 by ahrytsen         ###   ########.fr       */
+/*   Created: 2017/12/19 13:57:15 by ahrytsen          #+#    #+#             */
+/*   Updated: 2017/12/19 14:25:02 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_getsize(size_t value, int base)
+char	*ft_ltoa(long value)
 {
-	int	res;
-
-	res = 2;
-	while (value >= (size_t)base)
-	{
-		value /= base;
-		res++;
-	}
-	return (res);
-}
-
-char		*ft_ultoa_base(size_t value, int base, char st_l)
-{
+	long	val;
 	int		size;
 	char	*res;
 
-	size = ft_getsize(value, base);
+	val = value;
+	size = value < 0 ? 3 : 2;
+	while ((val > 9 || val < -9) && (val /= 10))
+		size++;
 	if (!(res = (char*)malloc(sizeof(char) * size--)))
 		return (NULL);
-	res[size--] = 0;
-	while (value >= (size_t)base)
+	res[size--] = '\0';
+	(value < 0) ? res[0] = '-' : 0;
+	while (value > 9 || value < -9)
 	{
-		res[size] = (value % base >= 10) ? value % base + st_l - 10 :
-			value % base + '0';
-		value /= base;
-		size--;
+		res[size--] = value % 10 * (value < 0 ? -1 : 1) + '0';
+		value /= 10;
 	}
-	res[size] = (value % base >= 10) ? value % base + st_l - 10 :
-		value % base + '0';
+	res[size] = value % 10 * (value < 0 ? -1 : 1) + '0';
 	return (res);
 }

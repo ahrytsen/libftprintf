@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/29 16:08:02 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/18 22:31:36 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/19 12:17:25 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ t_conv		g_phelper[] =
 {
 	{"sS", &ft_str},
 	{"diDUu", &ft_int},
-/*	{"pxXoObB", &ft_base},
-	{"n", },
+	{"pxXoOb", &ft_base},
+/*	{"n", },
 	{"eE", },
 	{"fF", },
 	{"gG", },

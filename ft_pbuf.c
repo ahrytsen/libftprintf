@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/16 18:18:01 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/18 15:17:57 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/19 11:48:11 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	ft_putchar_buf(int c)
 void	ft_putstr_buf(char *str, size_t len)
 {
 	while (len-- && g_buf)
-		if (g_buf->len == PBS - 1)
+		if (g_buf->len == PBS)
 		{
 			g_buf->next = ft_newbuf();
 			g_buf = g_buf->next;

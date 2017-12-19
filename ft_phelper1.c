@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 14:55:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/18 22:33:04 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/19 14:08:54 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ static long	ft_getnbr(va_list *ap, t_arg *arg)
 {
 	long	nbr;
 
-	nbr = ((ft_strchr("di", arg->spec) && !arg->len)
-			|| (arg->len && arg->len[0] == 'h'))
-		? va_arg(*ap, int) : va_arg(*ap, long);
+	nbr = ((arg->spec == 'p') || (arg->len && ft_strchr("lzj", arg->len[0])))
+		? va_arg(*ap, long) : va_arg(*ap, int);
 	(arg->len && !ft_strcmp("hh", arg->len)) ? nbr = (char)nbr : 0;
 	(arg->len && !ft_strcmp("h", arg->len)) ? nbr = (short)nbr : 0;
+	(!arg->len && arg->spec != 'p') ? nbr = (int)nbr : 0;
 	return (nbr);
 }
 
@@ -60,35 +60,31 @@ void	ft_int(va_list *ap, t_arg *arg)
 	char	*snbr;
 
 	nbr = ft_getnbr(ap, arg);
-	snbr = ft_ultoa_base(nbr, 10, 0, (ft_strchr("diD", arg->spec) ? 0 : 1));
+	snbr = ft_ltoa(nbr);
 	ft_putstr_buf(snbr, ft_strlen(snbr));
 	free(snbr);
 }
 
-/*void	ft_base(va_list *ap, t_arg *arg)
+void	ft_base(va_list *ap, t_arg *arg)
 {
 	char	*res;
-	long	num;
-	int		len;
-	char	pref[3];
+	size_t	num;
+//	int		len;
+	char	*pref;
 	int		base;
 
-	num = ft_strchr("di", arg->spec) ? va_arg(*ap, int) : va_arg(*ap, long);
-	base = (arg->spec == 'X' || arg->spec == 'x') ? 16 : 10;
+	num = ft_getnbr(ap, arg);
+	base = (arg->spec == 'X' || arg->spec == 'x' || arg->spec == 'p') ? 16 : 2;
 	base = (arg->spec == 'O' || arg->spec == 'o') ? 8 : base;
-	res = ft_ultoa_base(num, base, 'A' + arg->spec - ft_toupper(arg->spec),
-						ft_strchr("diD", arg->spec));
-	pref =
-	tmp = res;
-	if (num >= 0 && MOD(arg->width) <= (int)ft_strlen(res) && base == 10)
-	{
-		if (ft_strchr(arg->flags, '+'))
-			res = ft_strjoin("+", tmp);
-		else if (ft_strchr(arg->flags, ' '))
-			res = ft_strjoin(" ", tmp);
-		free(tmp);
-	}
-	}*/
+	res = ft_ultoa_base(num, base, 'A' + arg->spec - ft_toupper(arg->spec));
+	pref = (arg->spec == 'X' || arg->spec == 'p') ? "0X" : "b";
+	pref = (arg->spec == 'x') ? "0x" : pref;
+	pref = (arg->spec == 'o' || arg->spec == 'O') ? "0" : pref;
+	if ((num || ft_strchr("oO", arg->spec)) && ft_strchr(arg->flags, '#'))
+		ft_putstr_buf(pref, ft_strlen(pref));
+	(!num  && arg->is_prec && !arg->prec) ? 0 : ft_putstr_buf(res, ft_strlen(res));
+	free(res);
+}
 
 void	ft_undef(va_list *ap, t_arg *arg)
 {

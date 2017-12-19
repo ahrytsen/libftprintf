@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 19:54:49 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/18 18:12:05 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/19 12:15:14 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ ssize_t			ft_print_buf(t_buf *buf);
 int				ft_printf(const char *format, ...);
 void			ft_str(va_list *ap, t_arg *arg);
 void			ft_int(va_list *ap, t_arg *arg);
+void			ft_base(va_list *ap, t_arg *arg);
 void			ft_undef(va_list *ap, t_arg *arg);
 
 #endif

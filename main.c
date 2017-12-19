@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/30 13:17:30 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/18 22:34:09 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/19 11:47:23 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,3 @@ int	main()
 //	printf("\n%d\n", printf("%zu", sizeof(long double)));
 	printf("\n%d\n", ft_printf("%d", -5));
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
