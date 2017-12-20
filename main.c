@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/30 13:17:30 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/19 11:47:23 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/20 20:30:49 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,6 @@ int	main()
 	long double width = 0;
 	int l = 150;
 //	char *s = ft_strdup("some string");
-//	printf("\n%d\n", printf("%zu", sizeof(long double)));
-	printf("\n%d\n", ft_printf("%d", -5));
+//	printf("\n%d\n", printf("%C", 8364));
+	printf("\n%d\n", ft_printf("%C", 20301));
 }

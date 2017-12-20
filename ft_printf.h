@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 19:54:49 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/19 12:15:14 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/20 19:26:01 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,17 @@ typedef struct	s_conv
 }				t_conv;
 typedef struct	s_arg
 {
-	char	flags[6];
-	ssize_t	width;
-	int		is_prec;
-	ssize_t	prec;
-	char	*len;
-	char	spec;
+	char		flags[6];
+	ssize_t		width;
+	int			is_prec;
+	ssize_t		prec;
+	const char	*len;
+	char		spec;
 }				t_arg;
 
-extern t_buf	*g_buf;
-extern char		g_flags[];
-extern char		*g_len[];
+//extern t_buf	*g_buf;
+extern const char		g_flags[];
+extern const char		*g_len[];
 
 t_buf			*ft_newbuf(void);
 void			ft_putchar_buf(int c);
@@ -62,3 +62,16 @@ void			ft_base(va_list *ap, t_arg *arg);
 void			ft_undef(va_list *ap, t_arg *arg);
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+

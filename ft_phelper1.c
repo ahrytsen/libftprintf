@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 14:55:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/19 14:08:54 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/20 20:22:47 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,20 @@ void	ft_int(va_list *ap, t_arg *arg)
 {
 	long	nbr;
 	char	*snbr;
+//	char	*prec;
+	int		len;
 
 	nbr = ft_getnbr(ap, arg);
 	snbr = ft_ltoa(nbr);
-	ft_putstr_buf(snbr, ft_strlen(snbr));
+	len = ft_strlen(snbr);
+//	prec = arg->is_prec && arg->prec > len ? ft_memalloc(arg->prec - len + 1)
+//		: NULL;
+	ft_putstr_buf(snbr, len);
+/*	if (ft_strchr(arg->flags, '-') || arg->width < 0)
+	{
+		prec ? ft_putstr_buf(prec, arg->prec - len);
+
+	len < MOD(arg->width) ? ft_filler(arg, MOD(arg->width) - len) : 0;*/
 	free(snbr);
 }
 

@@ -6,16 +6,16 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/29 16:08:02 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/19 12:17:25 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/20 19:29:55 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-t_buf		*g_buf;
-char		g_flags[] = "#0-+ ";
-char		*g_len[] = {"hh", "ll", "h", "l", "j", "z", "L", NULL};
-t_conv		g_phelper[] =
+const t_buf		*g_buf;
+const char		g_flags[] = "#0-+ ";
+const char		*g_len[] = {"hh", "ll", "h", "l", "j", "z", "L", NULL};
+const t_conv	g_phelper[] =
 {
 	{"sS", &ft_str},
 	{"diDUu", &ft_int},
@@ -27,7 +27,7 @@ t_conv		g_phelper[] =
 	{"aA", },*/
 	{NULL, NULL}
 };
-t_color		g_colors[] =
+const t_color	g_colors[] =
 {
 	{"{eoc}", "\033[0m"}, {"{default}", "\033[39m"},
 	{"{black}", "\033[30m"}, {"{red}", "\033[31m"},
@@ -124,15 +124,15 @@ static void			ft_get_color(const char **format)
 
 int				ft_printf(const char *format, ...)
 {
-	t_arg	arg;
-	va_list	ap;
-	t_buf	*buf_head;
-	int		i;
+	t_arg		arg;
+	va_list		ap;
+	t_buf		*buf_head;
+	int			i;
 
 	i = 0;
 	g_buf = format ? ft_newbuf() : NULL;
 	format ? va_start(ap, format) : 0;
-	buf_head = g_buf;
+	buf_head = (t_buf*)g_buf;
 	while (g_buf && *format)
 		if (*format == '%')
 		{

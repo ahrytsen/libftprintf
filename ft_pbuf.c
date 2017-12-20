@@ -6,11 +6,13 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/16 18:18:01 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/19 11:48:11 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/20 20:28:50 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+extern t_buf	*g_buf;
 
 ssize_t	ft_print_buf(t_buf *buf)
 {
@@ -18,19 +20,24 @@ ssize_t	ft_print_buf(t_buf *buf)
 	t_buf	*tmp;
 
 	ret = 0;
-	while (g_buf && buf)
-	{
-		write(1, buf->str, buf->len);
-		ret += buf->len;
-		buf = buf->next;
-	}
-	while (buf)
-	{
-		free(buf->str);
-		tmp = buf;
-		buf = buf->next;
-		free(tmp);
-	}
+	if (g_buf)
+		while (buf)
+		{
+			tmp = buf->next;
+			write(1, buf->str, buf->len);
+			free(buf->str);
+			ret += buf->len;
+			free(buf);
+			buf = tmp;
+		}
+	else
+		while (buf)
+		{
+			free(buf->str);
+			tmp = buf;
+			buf = buf->next;
+			free(tmp);
+		}
 	return (g_buf ? ret : -1);
 }
 
@@ -40,7 +47,7 @@ void	ft_putchar_buf(int c)
 	int		len;
 
 	ft_bzero(buf, 5);
-	if (c <= 0x7F && (len = 1))
+	if ((MB_CUR_MAX == 1 || c <= 0x7F) && (len = 1))
 		buf[0] = c;
 	else if (c <= 0x7FF && (len = 2))
 	{
@@ -51,7 +58,7 @@ void	ft_putchar_buf(int c)
 	{
 		buf[0] = (c >> 12) + 0xE0;
 		buf[1] = ((c >> 6) & 0x3F) + 0x80;
-		buf[3] = (c & 0x3F) + 0x80;
+		buf[2] = (c & 0x3F) + 0x80;
 	}
 	else if (c <= 0x10FFFF && (len = 4))
 	{
