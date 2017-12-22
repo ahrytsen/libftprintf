@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/29 16:08:02 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/20 19:29:55 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/22 17:25:43 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ const char		*g_len[] = {"hh", "ll", "h", "l", "j", "z", "L", NULL};
 const t_conv	g_phelper[] =
 {
 	{"sS", &ft_str},
-	{"diDUu", &ft_int},
-	{"pxXoOb", &ft_base},
+	{"diD", &ft_int},
+	{"uUpxXoOb", &ft_base},
 /*	{"n", },
 	{"eE", },
 	{"fF", },
@@ -66,6 +66,7 @@ static const char	*ft_get_format(va_list *ap, const char *format, t_arg *arg)
 		format++;
 	if (*format == '.' && ++arg->is_prec)
 		arg->prec = (*++format == '*') ? va_arg(*ap, int) : ft_atol(format);
+	arg->prec < 0 ? arg->is_prec = 0 : 0;
 	while ((*format >= '0' && *format <= '9') || *format == '*')
 		format++;
 	i = 0;
@@ -94,33 +95,6 @@ static void			ft_get_color(const char **format)
 	else
 		ft_putchar_buf(*(*format++));
 }
-
-/*static char	*ft_prefix(char **res, t_arg *arg)
-{
-	char *pref;
-
-	pref = NULL;
-	if (ft_strchr("di", arg->spec))
-	{
-		if (ft_strchr(arg->flags, '+') && **res != '-')
-			pref = ft_strdup("+");
-		else if (ft_strchr(arg->flags, ' ') && **res != '-')
-			pref = ft_strdup(" ");
-		else if (**res == '-')
-		{
-			pref = *res;
-			*res = ft_strsub(*res, 1, ft_strlen(*res + 1));
-			free(pref);
-			pref = ft_strdup("-");
-		}
-
-	}
-	else if (ft_strchr("xX", arg->spec) && ft_strchr(arg->flags, '#'))
-		pref = arg->spec == 'X' ? ft_strdup("0X") : ft_strdup("0x");
-	else if (ft_strchr("oOb", arg->spec) && ft_strchr(arg->flags, '#'))
-		pref = arg->spec == 'b' ? ft_strdup("b") : ft_strdup("0");
-	return (pref);
-	}*/
 
 int				ft_printf(const char *format, ...)
 {

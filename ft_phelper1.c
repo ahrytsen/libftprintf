@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 14:55:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/20 20:22:47 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/22 20:45:46 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ static void	ft_filler(t_arg *arg, ssize_t width)
 {
 	char	filler;
 
-	filler = (!ft_strchr(arg->flags, '-') && arg->width >= 0
+	filler = (!(arg->is_prec && ft_strchr("diDuUpoObxX", arg->spec))
+			  && !ft_strchr(arg->flags, '-') && arg->width >= 0
 			  && ft_strchr(arg->flags, '0')) ? '0' : ' ';
 	while (width-- > 0)
 		ft_putchar_buf(filler);
@@ -28,9 +29,12 @@ static long	ft_getnbr(va_list *ap, t_arg *arg)
 
 	nbr = ((arg->spec == 'p') || (arg->len && ft_strchr("lzj", arg->len[0])))
 		? va_arg(*ap, long) : va_arg(*ap, int);
-	(arg->len && !ft_strcmp("hh", arg->len)) ? nbr = (char)nbr : 0;
-	(arg->len && !ft_strcmp("h", arg->len)) ? nbr = (short)nbr : 0;
-	(!arg->len && arg->spec != 'p') ? nbr = (int)nbr : 0;
+	if (arg->len && !ft_strcmp("hh", arg->len))
+		nbr = ft_strchr("di", arg->spec) ? (char)nbr : (unsigned char)nbr;
+	else if (arg->len && !ft_strcmp("h", arg->len))
+		nbr = ft_strchr("di", arg->spec) ? (short)nbr : (unsigned short)nbr;
+	else if (!arg->len && arg->spec != 'p')
+		nbr = ft_strchr("di", arg->spec) ? (int)nbr : (unsigned int)nbr;
 	return (nbr);
 }
 
@@ -44,7 +48,7 @@ void		ft_str(va_list *ap, t_arg *arg)
 	!s ? s = "(null)" : 0;
 	len = (arg->spec == 'S') || (arg->len && !ft_strcmp(arg->len, "l"))
 		? ft_strulen(s) : ft_strlen(s);
-	arg->is_prec && len > arg->prec ? len = arg->prec : 0;
+	arg->is_prec && len > MOD(arg->prec) ? len = MOD(arg->prec) : 0;
 	if (ft_strchr(arg->flags, '-') || arg->width < 0)
 		(arg->spec == 'S' || (arg->len && !ft_strcmp(arg->len, "l")))
 			? ft_putustr_buf(s, len) : ft_putstr_buf(s, len);
@@ -56,22 +60,34 @@ void		ft_str(va_list *ap, t_arg *arg)
 
 void	ft_int(va_list *ap, t_arg *arg)
 {
-	long	nbr;
+	char	*sign;
 	char	*snbr;
-//	char	*prec;
+	char	*prec;
 	int		len;
 
-	nbr = ft_getnbr(ap, arg);
-	snbr = ft_ltoa(nbr);
+	snbr = ft_ltoa(ft_getnbr(ap, arg));
+	sign = (*snbr == '-') ? "-" : "";
+	(ft_strchr(arg->flags, '+') && !*sign) ? sign = "+" : 0;
+	(ft_strchr(arg->flags, ' ') && !*sign) ? sign = " " : 0;
 	len = ft_strlen(snbr);
-//	prec = arg->is_prec && arg->prec > len ? ft_memalloc(arg->prec - len + 1)
-//		: NULL;
-	ft_putstr_buf(snbr, len);
-/*	if (ft_strchr(arg->flags, '-') || arg->width < 0)
-	{
-		prec ? ft_putstr_buf(prec, arg->prec - len);
-
-	len < MOD(arg->width) ? ft_filler(arg, MOD(arg->width) - len) : 0;*/
+	(*snbr == '-' || (arg->is_prec && !arg->prec && *snbr == '0')) ? len-- : 0;
+	prec = arg->is_prec && arg->prec > len
+		? ft_memalloc(arg->prec - len + 1) : NULL;
+	prec ? ft_memset(prec, '0', arg->prec - len) : 0;
+	(sign = ft_strjoin(sign, prec)) ? free(prec) : 0;
+	if (ft_strchr(arg->flags, '-') || arg->width < 0
+		|| (!ft_strchr(arg->flags, '-') && arg->width >= 0
+			&& ft_strchr(arg->flags, '0') && !arg->is_prec))
+		ft_putstr_buf(sign, ft_strlen(sign));
+	if ((len += ft_strlen(sign)) < MOD(arg->width))
+		ft_filler(arg, MOD(arg->width) - len);
+	if ((!ft_strchr(arg->flags, '-') && arg->width >= 0)
+			|| !ft_strchr(arg->flags, '0') && !arg->is_prec))
+		ft_putstr_buf(sign, ft_strlen(sign));
+	ft_putstr_buf(snbr + (*snbr == '-' ? 1 : 0), len);
+	if (!ft_strchr(arg->flags, '-') && arg->width >= 0)
+		(arg->spec == 'S' || (arg->len && !ft_strcmp(arg->len, "l")))
+			? ft_putustr_buf(s, len) : ft_putstr_buf(s, len);
 	free(snbr);
 }
 
