@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 14:55:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/24 18:43:16 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/24 21:38:51 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ static unsigned long	ft_getnbr(va_list *ap, t_arg *arg)
 {
 	unsigned long	nbr;
 
-/*	nbr = ((arg->spec == 'p') || (arg->len && ft_strchr("lzj", arg->len[0])))
-	? va_arg(*ap, unsigned long) : va_arg(*ap, unsigned int);*/
 	nbr = (ft_strchr("pDU", arg->spec) || (arg->len && ft_strchr("lzj", arg->len[0])))
 		? (unsigned long)va_arg(*ap, long) : (unsigned int)va_arg(*ap, int);
 	if (ft_strchr("pDU", arg->spec) || (arg->len && ft_strchr("lzj", arg->len[0])))
@@ -102,11 +100,14 @@ void	ft_base(t_buf *pbuf, va_list *ap, t_arg *arg)
 	(arg->spec == 'O' || arg->spec == 'o') ? base = 8 : 0;
 	arg->spec == 'b' ? base = 2 : 0;
 	tmp[2] = ft_ultoa_base(ft_getnbr(ap, arg), base, arg->spec == 'X' ? 'A' : 'a');
-	tmp[0] = (arg->spec == 'x' || arg->spec == 'p') ? "0x" : NULL;
+	tmp[0] = (arg->spec == 'x') ? "0x" : NULL;
 	(arg->spec == 'X') ? tmp[0] = "0X" : 0;
 	(arg->spec == 'o' || arg->spec == 'O') ? tmp[0] = "0" : 0;
-	!ft_strchr(arg->flags, '#') || *tmp[2] == '0' ? tmp[0] = NULL : 0;
+	((!ft_strchr("oO", arg->spec) && *tmp[2] == '0') || !ft_strchr(arg->flags, '#'))
+		? tmp[0] = NULL : 0;
+	(arg->spec == 'p') ? tmp[0] = "0x" : 0;
 	len[0] = ft_strlen(tmp[2]);
+	(arg->is_prec && !arg->prec && *tmp[2] == '0') ? len[0]-- : 0;
 	tmp[1] = arg->is_prec && arg->prec > len[0]
 		? ft_memalloc(arg->prec - len[0] + 1) : NULL;
 	tmp[1] ? ft_memset(tmp[1], '0', arg->prec - len[0]) : 0;
@@ -131,6 +132,8 @@ void	ft_undef(t_buf *pbuf, va_list *ap, t_arg *arg)
 	int	c[2];
 	int	charlen;
 
+	if (!arg->spec)
+		return ;
 	c[1] = 0;
 	c[0] = (arg->spec == 'C' || arg->spec == 'c') ? va_arg(*ap, int) : arg->spec;
 	(arg->spec == 'c' && (!arg->len || (arg->len && ft_strcmp(arg->len, "l"))))

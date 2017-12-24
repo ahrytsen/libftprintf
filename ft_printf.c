@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/29 16:08:02 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/24 17:08:39 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/24 21:38:22 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static const char	*ft_get_format(va_list *ap, const char *format, t_arg *arg)
 
 	i = 0;
 	ft_bzero(arg, sizeof(t_arg));
-	while (ft_strchr("#0-+ ", *format) && i < 6)
+	while (*format && ft_strchr("#0-+ ", *format) && i < 6)
 		if (!ft_strchr(arg->flags, *format))
 			arg->flags[i++] = *format++;
 		else
@@ -71,7 +71,7 @@ static const char	*ft_get_format(va_list *ap, const char *format, t_arg *arg)
 	while (g_len[i] && ft_strncmp(g_len[i], format, ft_strlen(g_len[i])))
 		i++;
 	arg->len = g_len[i];
-	format += arg->len ? ft_strlen(arg->len) : 0;
+	format += g_len[i] ? ft_strlen(g_len[i]) : 0;
 	arg->spec = *format;
 	return (*format ? ++format : format);
 }
@@ -89,10 +89,13 @@ static void			ft_get_color(const char **format, t_buf *pbuf)
 	{
 		ft_putstr_buf(pbuf, g_colors[i].color_cod,
 					  ft_strlen(g_colors[i].color_cod));
-		*format += ft_strlen_c(*format, '}');
+		*format += ft_strlen_c(*format, '}') + 1;
 	}
 	else
-		ft_putchar_buf(pbuf, *(*format++));
+	{
+		ft_putchar_buf(pbuf, **format);
+		*format += 1;
+	}
 }
 
 int				ft_printf(const char *format, ...)
@@ -110,10 +113,10 @@ int				ft_printf(const char *format, ...)
 		if (*format == '%')
 		{
 			format = ft_get_format(&ap, format + 1, &arg);
-			while ( g_phelper[i].conv && !ft_strchr(g_phelper[i].conv, arg.spec))
+			while (g_phelper[i].conv && !ft_strchr(g_phelper[i].conv, arg.spec))
 				i++;
-			g_phelper[i].conv ? g_phelper[i].ft_phelper(pbuf[1], &ap, &arg)
-				: ft_undef(pbuf[1], &ap, &arg);
+			(!arg.spec || !g_phelper[i].conv) ? ft_undef(pbuf[1], &ap, &arg)
+				: g_phelper[i].ft_phelper(pbuf[1], &ap, &arg);
 		}
 		else if (*format == '{')
 			ft_get_color(&format, pbuf[1]);
@@ -122,3 +125,13 @@ int				ft_printf(const char *format, ...)
 	format ? va_end(ap) : 0;
 	return (ft_print_buf(pbuf[1], pbuf[0]));
 }
+
+
+
+
+
+
+
+
+
+
