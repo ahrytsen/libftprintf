@@ -18,7 +18,7 @@
 # include "libft.h"
 
 # define MOD(a)(a >= 0 ? a : -a)
-# define PBS  8192
+# define PBS  10240
 
 typedef struct	s_buf
 {
