@@ -105,12 +105,11 @@ int				ft_printf(const char *format, ...)
 	t_buf		*pbuf[2];
 	int			i;
 
-	i = 0;
 	pbuf[0] = format ? ft_newbuf() : NULL;
 	format ? va_start(ap, format) : 0;
 	pbuf[1] = pbuf[0];
 	while (pbuf[1] && *format)
-		if (*format == '%')
+		if (*format == '%' && !(i = 0))
 		{
 			format = ft_get_format(&ap, format + 1, &arg);
 			while (g_phelper[i].conv && !ft_strchr(g_phelper[i].conv, arg.spec))
