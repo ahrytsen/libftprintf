@@ -18,7 +18,7 @@
 # include "libft.h"
 
 # define MOD(a)(a >= 0 ? a : -a)
-# define PBS  4242
+# define PBS  8192
 
 typedef struct	s_buf
 {
@@ -58,21 +58,3 @@ void			ft_base(t_buf *pbuf, va_list *ap, t_arg *arg);
 void			ft_undef(t_buf *pbuf, va_list *ap, t_arg *arg);
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
