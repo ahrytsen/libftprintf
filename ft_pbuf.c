@@ -6,42 +6,31 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/16 18:18:01 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/20 20:28:50 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/24 17:41:53 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-extern t_buf	*g_buf;
-
-ssize_t	ft_print_buf(t_buf *buf)
+ssize_t	ft_print_buf(t_buf *pbuf, t_buf *pbuf_head)
 {
 	ssize_t	ret;
 	t_buf	*tmp;
 
 	ret = 0;
-	if (g_buf)
-		while (buf)
-		{
-			tmp = buf->next;
-			write(1, buf->str, buf->len);
-			free(buf->str);
-			ret += buf->len;
-			free(buf);
-			buf = tmp;
-		}
-	else
-		while (buf)
-		{
-			free(buf->str);
-			tmp = buf;
-			buf = buf->next;
-			free(tmp);
-		}
-	return (g_buf ? ret : -1);
+	while (pbuf_head)
+	{
+		tmp = pbuf_head->next;
+		pbuf ? write(1, pbuf_head->str, pbuf_head->len) : 0;
+		free(pbuf_head->str);
+		ret += pbuf_head->len;
+		free(pbuf_head);
+		pbuf_head = tmp;
+	}
+	return (pbuf ? ret : -1);
 }
 
-void	ft_putchar_buf(int c)
+void	ft_putchar_buf(t_buf *pbuf, int c)
 {
 	char	buf[5];
 	int		len;
@@ -67,25 +56,25 @@ void	ft_putchar_buf(int c)
 		buf[2] = ((c >> 6) & 0x3F) + 0x80;
 		buf[3] = (c & 0x3F) + 0x80;
 	}
-	ft_putstr_buf(buf, len);
+	ft_putstr_buf(pbuf, buf, len);
 }
 
-void	ft_putstr_buf(char *str, size_t len)
+void	ft_putstr_buf(t_buf *pbuf, char *str, size_t len)
 {
-	while (len-- && g_buf)
-		if (g_buf->len == PBS)
+	while (len-- && pbuf)
+		if (pbuf->len == PBS)
 		{
-			g_buf->next = ft_newbuf();
-			g_buf = g_buf->next;
+			pbuf->next = ft_newbuf();
+			pbuf = pbuf->next;
 		}
 		else
-			g_buf->str[g_buf->len++] = *str++;
+			pbuf->str[pbuf->len++] = *str++;
 }
 
-void	ft_putustr_buf(int *str, size_t len)
+void	ft_putustr_buf(t_buf *pbuf, int *str, size_t len)
 {
-	while (len-- && g_buf)
-		ft_putchar_buf(*str++);
+	while (len-- && pbuf)
+		ft_putchar_buf(pbuf, *str++);
 }
 
 t_buf	*ft_newbuf(void)

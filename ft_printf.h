@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 19:54:49 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/20 19:26:01 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/24 15:54:28 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "libft.h"
 
 # define MOD(a)(a >= 0 ? a : -a)
-# define PBS  65535
+# define PBS  4242
 
 typedef struct	s_buf
 {
@@ -46,22 +46,23 @@ typedef struct	s_arg
 	char		spec;
 }				t_arg;
 
-//extern t_buf	*g_buf;
-extern const char		g_flags[];
-extern const char		*g_len[];
-
 t_buf			*ft_newbuf(void);
-void			ft_putchar_buf(int c);
-void			ft_putustr_buf(int *str, size_t len);
-void			ft_putstr_buf(char *str, size_t len);
-ssize_t			ft_print_buf(t_buf *buf);
+void			ft_putchar_buf(t_buf *pbuf, int c);
+void			ft_putustr_buf(t_buf *pbuf, int *str, size_t len);
+void			ft_putstr_buf(t_buf *pbuf, char *str, size_t len);
+ssize_t			ft_print_buf(t_buf *pbuf, t_buf *pbuf_head);
 int				ft_printf(const char *format, ...);
-void			ft_str(va_list *ap, t_arg *arg);
-void			ft_int(va_list *ap, t_arg *arg);
-void			ft_base(va_list *ap, t_arg *arg);
-void			ft_undef(va_list *ap, t_arg *arg);
+void			ft_str(t_buf *pbuf, va_list *ap, t_arg *arg);
+void			ft_int(t_buf *pbuf, va_list *ap, t_arg *arg);
+void			ft_base(t_buf *pbuf, va_list *ap, t_arg *arg);
+void			ft_undef(t_buf *pbuf, va_list *ap, t_arg *arg);
 
 #endif
+
+
+
+
+
 
 
 
