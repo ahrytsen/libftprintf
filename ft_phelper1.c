@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 14:55:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/24 21:38:51 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/25 02:23:32 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,10 +130,17 @@ void	ft_base(t_buf *pbuf, va_list *ap, t_arg *arg)
 void	ft_undef(t_buf *pbuf, va_list *ap, t_arg *arg)
 {
 	int	c[2];
+	int	*n;
 	int	charlen;
 
 	if (!arg->spec)
 		return ;
+	else if (arg->spec == 'n')
+	{
+		n = va_arg(*ap, void*);
+		*n = pbuf->id * PBS + pbuf->len;
+		return ;
+	}
 	c[1] = 0;
 	c[0] = (arg->spec == 'C' || arg->spec == 'c') ? va_arg(*ap, int) : arg->spec;
 	(arg->spec == 'c' && (!arg->len || (arg->len && ft_strcmp(arg->len, "l"))))
