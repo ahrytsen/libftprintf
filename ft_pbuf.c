@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/16 18:18:01 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/25 01:58:29 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/25 02:06:44 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	ft_putstr_buf(t_buf *pbuf, char *str, size_t len)
 		if (pbuf->len == PBS)
 		{
 			pbuf->next = ft_newbuf();
+			pbuf->next->id = pbuf->id + 1;
 			pbuf = pbuf->next;
 		}
 		else

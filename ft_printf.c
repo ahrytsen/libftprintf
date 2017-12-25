@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/29 16:08:02 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/24 21:38:22 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/25 02:12:53 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ const static t_conv		g_phelper[] =
 	{"sS", &ft_str},
 	{"diD", &ft_int},
 	{"uUpxXoOb", &ft_base},
-/*	{"n", },
-	{"eE", },
+	{"n", &ft_pn},
+/*	{"eE", },
 	{"fF", },
 	{"gG", },
 	{"aA", },*/
@@ -98,6 +98,14 @@ static void			ft_get_color(const char **format, t_buf *pbuf)
 	}
 }
 
+static void		ft_pn(t_buf *pbuf, va_list *ap, t_arg *arg)
+{
+	int	*n;
+
+	n = va_arg(*ap, *int);
+	*n = pbuf->id * PBS + pbuf->len;
+}
+
 int				ft_printf(const char *format, ...)
 {
 	t_arg		arg;
@@ -124,13 +132,3 @@ int				ft_printf(const char *format, ...)
 	format ? va_end(ap) : 0;
 	return (ft_print_buf(pbuf[1], pbuf[0]));
 }
-
-
-
-
-
-
-
-
-
-

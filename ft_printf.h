@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 19:54:49 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/25 01:50:51 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/25 02:04:50 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 
 typedef struct	s_buf
 {
+	size_t			id;
 	size_t			len;
 	char			*str;
 	struct s_buf	*next;
