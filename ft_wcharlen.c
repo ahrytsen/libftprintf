@@ -1,23 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_wcharlen.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/30 13:17:30 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/25 21:00:29 by ahrytsen         ###   ########.fr       */
+/*   Created: 2017/12/25 16:55:19 by ahrytsen          #+#    #+#             */
+/*   Updated: 2017/12/25 16:57:59 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
 #include "libft.h"
-#include <libc.h>
-#include <locale.h>
 
-int	main()
+int	ft_wcharlen(int c)
 {
-	setlocale(LC_ALL, "");
-//	printf("\n%d\n", printf("%llX", 4294967296));
-	printf("\n%d\n", ft_printf("%llX", 4294967296));
+	int	len;
+
+	len = 0;
+	if (c <= 0x7F)
+		len++;
+	else if (c <= 0x7FF)
+		len += 2;
+	else if (c <= 0xFFFF)
+		len += 3;
+	else if (c <= 0x1FFFFF)
+		len += 4;
+	else if (c <= 0x3FFFFFF)
+		len += 5;
+	else
+		len += 6;
+	return (len);
 }

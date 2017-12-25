@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 19:54:49 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/25 02:04:50 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/25 15:29:52 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ typedef struct	s_arg
 
 t_buf			*ft_newbuf(void);
 void			ft_putchar_buf(t_buf *pbuf, int c);
-void			ft_putustr_buf(t_buf *pbuf, int *str, size_t len);
-void			ft_putstr_buf(t_buf *pbuf, char *str, size_t len);
+void			ft_putustr_buf(t_buf *pbuf, int *str, ssize_t len);
+void			ft_putstr_buf(t_buf *pbuf, char *str, ssize_t len);
 ssize_t			ft_print_buf(t_buf *pbuf, t_buf *pbuf_head);
 int				ft_printf(const char *format, ...);
 void			ft_str(t_buf *pbuf, va_list *ap, t_arg *arg);

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 14:55:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/25 13:46:44 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/25 18:32:49 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,11 @@ static unsigned long	ft_getnbr(va_list *ap, t_arg *arg)
 {
 	unsigned long	nbr;
 
-	nbr = (ft_strchr("pDU", arg->spec) || (arg->len && ft_strchr("lzj", arg->len[0])))
+	nbr = (ft_strchr("pDUO", arg->spec)
+		   || (arg->len && ft_strchr("lzj", arg->len[0])))
 		? (unsigned long)va_arg(*ap, long) : (unsigned int)va_arg(*ap, int);
-	if (ft_strchr("pDU", arg->spec) || (arg->len && ft_strchr("lzj", arg->len[0])))
+	if (ft_strchr("pDUO", arg->spec)
+		|| (arg->len && ft_strchr("lzj", arg->len[0])))
 		return (nbr);
 	if (arg->len && !ft_strcmp("hh", arg->len))
 		nbr = ft_strchr("di", arg->spec) ? (char)nbr : (unsigned char)nbr;
@@ -44,13 +46,23 @@ void		ft_str(t_buf *pbuf, va_list *ap, t_arg *arg)
 {
 	void	*s;
 	ssize_t	len;
+	ssize_t	i;
+	ssize_t j;
 
-	if (!(s = va_arg(*ap, void*)))
-		arg->spec = 's';
+	(!(s = va_arg(*ap, void*))) ? arg->spec = 's' : 0;
 	!s ? s = "(null)" : 0;
 	len = (arg->spec == 'S') || (arg->len && !ft_strcmp(arg->len, "l"))
 		? ft_strulen(s) : ft_strlen(s);
-	arg->is_prec && len > MOD(arg->prec) ? len = MOD(arg->prec) : 0;
+	if ((arg->spec == 'S' || (arg->len && !ft_strcmp(arg->len, "l")))
+		&& arg->is_prec && len > arg->prec  && !(len = 0))
+	{
+		i = 0;
+		j = 0;
+		while ((j += ft_wcharlen(((int*)s)[i++])) <= arg->prec)
+			   len = j;
+	}
+	else if (arg->is_prec && len > arg->prec)
+		len = arg->prec;
 	if (ft_strchr(arg->flags, '-') || arg->width < 0)
 		(arg->spec == 'S' || (arg->len && !ft_strcmp(arg->len, "l")))
 			? ft_putustr_buf(pbuf, s, len) : ft_putstr_buf(pbuf, s, len);
@@ -85,9 +97,9 @@ void	ft_int(t_buf *pbuf, va_list *ap, t_arg *arg)
 	!ft_strchr(arg->flags, '-') && arg->width >= 0 && len[1] > 0 && !arg->is_prec
 	 && ft_strchr(arg->flags, '0') ? ft_filler(pbuf, arg, len[1]) : 0;
 	ft_putstr_buf(pbuf, tmp[2] + (*tmp[2] == '-' ? 1 : 0), len[0]);
-	free(tmp[2]);
 	((ft_strchr(arg->flags, '-') || arg->width < 0) && len[1] > 0)
 		? ft_filler(pbuf, arg, len[1]) : 0;
+	free(tmp[2]);
 }
 
 void	ft_base(t_buf *pbuf, va_list *ap, t_arg *arg)
@@ -108,9 +120,11 @@ void	ft_base(t_buf *pbuf, va_list *ap, t_arg *arg)
 	len[0] = ft_strlen(tmp[2]);
 	(arg->is_prec && !arg->prec && *tmp[2] == '0'
 	 && !(ft_strchr("oO", arg->spec) && ft_strchr(arg->flags, '#'))) ? len[0]-- : 0;
-	tmp[1] = arg->is_prec && arg->prec > len[0]
+	tmp[1] = (arg->is_prec && arg->prec > len[0])
 		? ft_memalloc(arg->prec - len[0] + 1) : NULL;
-	tmp[1] ? ft_memset(tmp[1], '0', arg->prec - len[0]) : 0;
+	if (tmp[1])
+		ft_memset(tmp[1], '0', arg->prec - len[0]
+				  - ((ft_strchr("oO", arg->spec) && tmp[0]) ? 1 : 0));
 	(tmp[0] = ft_strjoin(tmp[0], tmp[1])) ? free(tmp[1]) : 0;
 	len[1] = MOD(arg->width) - len[0] - (tmp[0] ? ft_strlen(tmp[0]) : 0);
 	(arg->width >= 0 && (arg->is_prec || !ft_strchr(arg->flags, '0'))
