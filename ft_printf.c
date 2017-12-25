@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/29 16:08:02 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/25 02:22:47 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/25 13:09:09 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static void			ft_get_color(const char **format, t_buf *pbuf)
 	if (g_colors[i].color_name)
 	{
 		ft_putstr_buf(pbuf, g_colors[i].color_cod,
-					  ft_strlen(g_colors[i].color_cod));
+					ft_strlen(g_colors[i].color_cod));
 		*format += ft_strlen_c(*format, '}') + 1;
 	}
 	else
@@ -97,7 +97,7 @@ static void			ft_get_color(const char **format, t_buf *pbuf)
 	}
 }
 
-int				ft_printf(const char *format, ...)
+int					ft_printf(const char *format, ...)
 {
 	t_arg		arg;
 	va_list		ap;

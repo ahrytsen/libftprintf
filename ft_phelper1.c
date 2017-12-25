@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 14:55:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/25 02:23:32 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/25 13:46:44 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,11 +103,11 @@ void	ft_base(t_buf *pbuf, va_list *ap, t_arg *arg)
 	tmp[0] = (arg->spec == 'x') ? "0x" : NULL;
 	(arg->spec == 'X') ? tmp[0] = "0X" : 0;
 	(arg->spec == 'o' || arg->spec == 'O') ? tmp[0] = "0" : 0;
-	((!ft_strchr("oO", arg->spec) && *tmp[2] == '0') || !ft_strchr(arg->flags, '#'))
-		? tmp[0] = NULL : 0;
+	(*tmp[2] == '0' || !ft_strchr(arg->flags, '#')) ? tmp[0] = NULL : 0;
 	(arg->spec == 'p') ? tmp[0] = "0x" : 0;
 	len[0] = ft_strlen(tmp[2]);
-	(arg->is_prec && !arg->prec && *tmp[2] == '0') ? len[0]-- : 0;
+	(arg->is_prec && !arg->prec && *tmp[2] == '0'
+	 && !(ft_strchr("oO", arg->spec) && ft_strchr(arg->flags, '#'))) ? len[0]-- : 0;
 	tmp[1] = arg->is_prec && arg->prec > len[0]
 		? ft_memalloc(arg->prec - len[0] + 1) : NULL;
 	tmp[1] ? ft_memset(tmp[1], '0', arg->prec - len[0]) : 0;
