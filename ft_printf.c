@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/29 16:08:02 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/25 21:00:55 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/26 02:57:58 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ inline static int	ft_get_len(const char **format, t_arg *arg)
 	i = 0;
 	while (g_len[i] && ft_strncmp(g_len[i], *format, ft_strlen(g_len[i])))
 		i++;
-	g_len[i] ? arg->len = g_len[i] : 0;
-	*format += g_len[i] ? ft_strlen(arg->len) - 1 : 0;
+	(g_len[i] && !arg->len) ? arg->len = g_len[i] : 0;
+	*format += g_len[i] ? ft_strlen(g_len[i]) - 1 : 0;
 	return (g_len[i] ? 1 : 0);
 }
 
@@ -102,12 +102,14 @@ inline static void	ft_get_width(const char **format, va_list *ap, t_arg *arg)
 
 inline static void	ft_get_prec(const char **format, va_list *ap, t_arg *arg)
 {
-	(*format)++;
-	if (**format == '*')
-		arg->prec = va_arg(*ap, int);
-	else if (**format >= '0' && **format <= '9')
+	if (*(*format + 1) == '*')
 	{
-		arg->prec = ft_atol(*format);
+		(*format)++;
+		arg->prec = va_arg(*ap, int);
+	}
+	else
+	{
+		arg->prec = ft_atol(*format + 1);
 		while (*(*format + 1) >= '0' && *(*format + 1) <= '9')
 			(*format)++;
 	}
