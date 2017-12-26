@@ -6,13 +6,13 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/29 16:08:02 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/26 02:57:58 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/26 03:32:08 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-const static char		*g_len[] = {"hh", "ll", "h", "l", "j", "z", "L", NULL};
+const static char		*g_len[] = {"hh", "h", "l", "ll", "j", "z", "L", NULL};
 const static t_conv		g_phelper[] =
 {
 	{"sS", &ft_str},
@@ -83,7 +83,7 @@ inline static int	ft_get_len(const char **format, t_arg *arg)
 	i = 0;
 	while (g_len[i] && ft_strncmp(g_len[i], *format, ft_strlen(g_len[i])))
 		i++;
-	(g_len[i] && !arg->len) ? arg->len = g_len[i] : 0;
+	(g_len[i] && arg->len < g_len[i]) ? arg->len = g_len[i] : 0;
 	*format += g_len[i] ? ft_strlen(g_len[i]) - 1 : 0;
 	return (g_len[i] ? 1 : 0);
 }
@@ -113,7 +113,7 @@ inline static void	ft_get_prec(const char **format, va_list *ap, t_arg *arg)
 		while (*(*format + 1) >= '0' && *(*format + 1) <= '9')
 			(*format)++;
 	}
-	arg->prec > 0 ? arg->is_prec = 1 : 0;
+	arg->prec >= 0 ? arg->is_prec = 1 : 0;
 }
 
 static const char	*ft_get_format(va_list *ap, const char *format, t_arg *arg)

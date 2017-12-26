@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/30 13:17:30 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/25 21:00:29 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/26 03:12:02 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,6 @@
 int	main()
 {
 	setlocale(LC_ALL, "");
-//	printf("\n%d\n", printf("%llX", 4294967296));
-	printf("\n%d\n", ft_printf("%llX", 4294967296));
+	printf("\n%d\n", printf("%hhld", 9223372036854775807));
+	printf("\n%d\n", ft_printf("%hhld", 9223372036854775807));
 }
