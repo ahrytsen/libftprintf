@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/28 05:35:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/25 17:00:39 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/28 16:12:11 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@
 # include <sys/types.h>
 # include <sys/uio.h>
 
+/*
+**				ft_printf
+*/
+int				ft_printf(const char *format, ...);
 /*
 **				Get_Next_Line
 */
@@ -116,5 +120,6 @@ char			*ft_strextend(char *s1, char *s2);
 char			*ft_ultoa_base(size_t value, int base, char st_l);
 long			ft_atol(const char *str);
 char			*ft_ltoa(long value);
+char			*ft_dtoa(double nbr, int precision);
 
 #endif
