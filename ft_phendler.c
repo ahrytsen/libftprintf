@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 14:55:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/26 21:06:54 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/28 16:49:13 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ inline void	ft_print_arg(t_buf *pbuf, t_arg *arg, char **tmp, int *len)
 		? ft_filler(pbuf, arg, len[1]) : 0;
 }
 
-void		ft_str(t_buf *pbuf, va_list *ap, t_arg *arg)
+inline void	ft_str(t_buf *pbuf, va_list *ap, t_arg *arg)
 {
 	void	*s;
 	ssize_t	len;
@@ -63,7 +63,7 @@ void		ft_str(t_buf *pbuf, va_list *ap, t_arg *arg)
 			? ft_putustr_buf(pbuf, s, len) : ft_putstr_buf(pbuf, s, len);
 }
 
-void		ft_int(t_buf *pbuf, va_list *ap, t_arg *arg)
+inline void	ft_int(t_buf *pbuf, va_list *ap, t_arg *arg)
 {
 	char	*tmp[3];
 	int		len[2];
@@ -79,7 +79,7 @@ void		ft_int(t_buf *pbuf, va_list *ap, t_arg *arg)
 	free(tmp[2]);
 }
 
-void		ft_base(t_buf *pbuf, va_list *ap, t_arg *arg)
+inline void	ft_base(t_buf *pbuf, va_list *ap, t_arg *arg)
 {
 	char	*tmp[3];
 	int		len[2];
@@ -103,7 +103,7 @@ void		ft_base(t_buf *pbuf, va_list *ap, t_arg *arg)
 	free(tmp[2]);
 }
 
-void		ft_undef(t_buf *pbuf, va_list *ap, t_arg *arg)
+inline void	ft_undef(t_buf *pbuf, va_list *ap, t_arg *arg)
 {
 	int	c[2];
 	int	*n;
