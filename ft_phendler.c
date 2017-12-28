@@ -6,13 +6,13 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 14:55:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/28 16:49:13 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/28 21:41:28 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-inline void	ft_print_arg(t_buf *pbuf, t_arg *arg, char **tmp, int *len)
+inline void	ft_print_arg(t_buf **pbuf, t_arg *arg, char **tmp, int *len)
 {
 	tmp[1] = arg->is_prec && arg->prec > len[0]
 		? ft_memalloc(arg->prec - len[0] + 1) : NULL;
@@ -34,7 +34,7 @@ inline void	ft_print_arg(t_buf *pbuf, t_arg *arg, char **tmp, int *len)
 		? ft_filler(pbuf, arg, len[1]) : 0;
 }
 
-inline void	ft_str(t_buf *pbuf, va_list *ap, t_arg *arg)
+inline void	ft_str(t_buf **pbuf, va_list *ap, t_arg *arg)
 {
 	void	*s;
 	ssize_t	len;
@@ -42,6 +42,7 @@ inline void	ft_str(t_buf *pbuf, va_list *ap, t_arg *arg)
 
 	if (!(s = va_arg(*ap, void*)))
 		arg->spec = 's';
+	!s ? arg->len = NULL : 0;
 	!s ? s = "(null)" : 0;
 	len = (arg->spec == 'S') || (arg->len && !ft_strcmp(arg->len, "l"))
 		? ft_strulen(s) : ft_strlen(s);
@@ -63,7 +64,7 @@ inline void	ft_str(t_buf *pbuf, va_list *ap, t_arg *arg)
 			? ft_putustr_buf(pbuf, s, len) : ft_putstr_buf(pbuf, s, len);
 }
 
-inline void	ft_int(t_buf *pbuf, va_list *ap, t_arg *arg)
+inline void	ft_int(t_buf **pbuf, va_list *ap, t_arg *arg)
 {
 	char	*tmp[3];
 	int		len[2];
@@ -79,7 +80,7 @@ inline void	ft_int(t_buf *pbuf, va_list *ap, t_arg *arg)
 	free(tmp[2]);
 }
 
-inline void	ft_base(t_buf *pbuf, va_list *ap, t_arg *arg)
+inline void	ft_base(t_buf **pbuf, va_list *ap, t_arg *arg)
 {
 	char	*tmp[3];
 	int		len[2];
@@ -103,29 +104,26 @@ inline void	ft_base(t_buf *pbuf, va_list *ap, t_arg *arg)
 	free(tmp[2]);
 }
 
-inline void	ft_undef(t_buf *pbuf, va_list *ap, t_arg *arg)
+inline void	ft_undef(t_buf **pbuf, va_list *ap, t_arg *arg)
 {
-	int	c[2];
+	int	c;
 	int	*n;
-	int	charlen;
 
 	if (!arg->spec)
 		return ;
 	else if (arg->spec == 'n')
 	{
 		n = va_arg(*ap, void*);
-		*n = pbuf->id * PBS + pbuf->len;
+		*n = (*pbuf)->id * PBS + (*pbuf)->len;
 		return ;
 	}
-	c[1] = 0;
-	c[0] = (arg->spec == 'C' || arg->spec == 'c')
+	c = (arg->spec == 'C' || arg->spec == 'c')
 		? va_arg(*ap, int) : arg->spec;
-	(arg->spec == 'c' && (!arg->len || (arg->len && ft_strcmp(arg->len, "l"))))
-		? c[0] = (char)c[0] : 0;
+	!(arg->spec == 'C' || (arg->len && !ft_strcmp(arg->len, "l")))
+		? c = (char)c : 0;
 	if (ft_strchr(arg->flags, '-') || arg->width < 0)
-		ft_putchar_buf(pbuf, c[0]);
-	charlen = c[0] ? ft_strulen(c) : 1;
-	ft_filler(pbuf, arg, MOD(arg->width) - charlen);
+		ft_putchar_buf(pbuf, c);
+	ft_filler(pbuf, arg, MOD(arg->width) - ft_wcharlen(c));
 	if (!ft_strchr(arg->flags, '-') && arg->width >= 0)
-		ft_putchar_buf(pbuf, c[0]);
+		ft_putchar_buf(pbuf, c);
 }

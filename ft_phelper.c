@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/26 14:03:35 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/26 21:23:34 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/28 20:36:02 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ inline void	ft_get_prec(const char **format, va_list *ap, t_arg *arg)
 	arg->prec >= 0 ? arg->is_prec = 1 : 0;
 }
 
-inline void	ft_filler(t_buf *pbuf, t_arg *arg, ssize_t width)
+inline void	ft_filler(t_buf **pbuf, t_arg *arg, ssize_t width)
 {
 	char	filler;
 

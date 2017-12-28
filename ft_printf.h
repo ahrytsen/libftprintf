@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 19:54:49 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/28 16:33:11 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/28 20:22:07 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ int				ft_printf(const char *format, ...);
 **				Buffer managment!
 */
 t_buf			*ft_newbuf(void);
-void			ft_putchar_buf(t_buf *pbuf, int c);
-void			ft_putustr_buf(t_buf *pbuf, int *str, ssize_t len);
-void			ft_putstr_buf(t_buf *pbuf, char *str, ssize_t len);
+void			ft_putchar_buf(t_buf **pbuf, int c);
+void			ft_putustr_buf(t_buf **pbuf, int *str, ssize_t len);
+void			ft_putstr_buf(t_buf **pbuf, char *str, ssize_t len);
 ssize_t			ft_print_buf(t_buf *pbuf, t_buf *pbuf_head);
 /*
 **				Helpers!
@@ -68,16 +68,16 @@ ssize_t			ft_print_buf(t_buf *pbuf, t_buf *pbuf_head);
 int				ft_get_len(const char **format, t_arg *arg);
 void			ft_get_width(const char **format, va_list *ap, t_arg *arg);
 void			ft_get_prec(const char **format, va_list *ap, t_arg *arg);
-void			ft_filler(t_buf *pbuf, t_arg *arg, ssize_t width);
+void			ft_filler(t_buf **pbuf, t_arg *arg, ssize_t width);
 long			ft_getnbr(va_list *ap, t_arg *arg);
-void			ft_print_arg(t_buf *pbuf, t_arg *arg, char **tmp, int *len);
+void			ft_print_arg(t_buf **pbuf, t_arg *arg, char **tmp, int *len);
 /*
 **				Conversion hendlers!
 */
-void			ft_str(t_buf *pbuf, va_list *ap, t_arg *arg);
-void			ft_int(t_buf *pbuf, va_list *ap, t_arg *arg);
-void			ft_base(t_buf *pbuf, va_list *ap, t_arg *arg);
-void			ft_undef(t_buf *pbuf, va_list *ap, t_arg *arg);
-void			ft_pfd(t_buf *pbuf, va_list *ap, t_arg *arg);
+void			ft_str(t_buf **pbuf, va_list *ap, t_arg *arg);
+void			ft_int(t_buf **pbuf, va_list *ap, t_arg *arg);
+void			ft_base(t_buf **pbuf, va_list *ap, t_arg *arg);
+void			ft_undef(t_buf **pbuf, va_list *ap, t_arg *arg);
+void			ft_pfd(t_buf **pbuf, va_list *ap, t_arg *arg);
 
 #endif

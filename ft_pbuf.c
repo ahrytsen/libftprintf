@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/16 18:18:01 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/26 13:56:44 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/28 20:19:14 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,11 @@ ssize_t	ft_print_buf(t_buf *pbuf, t_buf *pbuf_head)
 	return (pbuf ? ret : -1);
 }
 
-void	ft_putchar_buf(t_buf *pbuf, int c)
+void	ft_putchar_buf(t_buf **pbuf, int c)
 {
 	char	buf[5];
 	int		len;
 
-	ft_bzero(buf, 5);
 	if ((MB_CUR_MAX == 1 || c <= 0x7F) && (len = 1))
 		buf[0] = c;
 	else if (c <= 0x7FF && (len = 2))
@@ -59,25 +58,24 @@ void	ft_putchar_buf(t_buf *pbuf, int c)
 	ft_putstr_buf(pbuf, buf, len);
 }
 
-void	ft_putstr_buf(t_buf *pbuf, char *str, ssize_t len)
+void	ft_putstr_buf(t_buf **pbuf, char *str, ssize_t len)
 {
-	while (len && pbuf)
-		if (pbuf->len == PBS)
+	while (len && *pbuf)
+	{
+		if ((*pbuf)->len == PBS)
 		{
-			pbuf->next = ft_newbuf();
-			pbuf->next->id = pbuf->id + 1;
-			pbuf = pbuf->next;
+			(*pbuf)->next = ft_newbuf();
+			(*pbuf)->next->id = (*pbuf)->id + 1;
+			*pbuf = (*pbuf)->next;
 		}
-		else
-		{
-			pbuf->str[pbuf->len++] = *str++;
-			len--;
-		}
+		(*pbuf)->str[(*pbuf)->len++] = *str++;
+		len--;
+	}
 }
 
-void	ft_putustr_buf(t_buf *pbuf, int *str, ssize_t len)
+void	ft_putustr_buf(t_buf **pbuf, int *str, ssize_t len)
 {
-	while ((len -= ft_wcharlen(*str)) >= 0 && pbuf)
+	while ((len -= ft_wcharlen(*str)) >= 0 && *pbuf)
 		ft_putchar_buf(pbuf, *str++);
 }
 

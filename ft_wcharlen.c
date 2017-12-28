@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/25 16:55:19 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/25 16:57:59 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/28 21:34:04 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,13 @@
 
 int	ft_wcharlen(int c)
 {
-	int	len;
-
-	len = 0;
-	if (c <= 0x7F)
-		len++;
+	if (c <= 0x7F || MB_CUR_MAX == 1)
+		return (1);
 	else if (c <= 0x7FF)
-		len += 2;
+		return (2);
 	else if (c <= 0xFFFF)
-		len += 3;
-	else if (c <= 0x1FFFFF)
-		len += 4;
-	else if (c <= 0x3FFFFFF)
-		len += 5;
-	else
-		len += 6;
-	return (len);
+		return (3);
+	else if (c <= 0x10FFFF)
+		return (4);
+	return (0);
 }
