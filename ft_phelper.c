@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/26 14:03:35 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/28 20:36:02 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/29 14:51:07 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 const static t_len	g_len[] =
 {
 	{1, "hh"}, {2, "h"}, {4, "ll"}, {3, "l"},
-	{5, "j"}, {6, "z"}, {7, "L"}, {0, NULL}
+	{5, "j"}, {6, "t"}, {7, "z"}, {8, "L"}, {0, NULL}
 };
 
 inline int	ft_get_len(const char **format, t_arg *arg)
@@ -79,16 +79,16 @@ inline long	ft_getnbr(va_list *ap, t_arg *arg)
 	long	nbr;
 
 	nbr = (ft_strchr("pDUO", arg->spec)
-			|| (arg->len && ft_strchr("lzj", arg->len[0])))
-		? (unsigned long)va_arg(*ap, long) : (unsigned int)va_arg(*ap, int);
+			|| (arg->len && ft_strchr("lzjt", arg->len[0])))
+		? va_arg(*ap, long) : (unsigned int)va_arg(*ap, int);
 	if (ft_strchr("pDUO", arg->spec)
-		|| (arg->len && ft_strchr("lzj", arg->len[0])))
+		|| (arg->len && ft_strchr("lzjt", arg->len[0])))
 		return (nbr);
 	if (arg->len && !ft_strcmp("hh", arg->len))
 		nbr = ft_strchr("di", arg->spec) ? (char)nbr : (unsigned char)nbr;
 	else if (arg->len && !ft_strcmp("h", arg->len))
 		nbr = ft_strchr("di", arg->spec) ? (short)nbr : (unsigned short)nbr;
-	else if (!arg->len)
+	else
 		ft_strchr("di", arg->spec) ? nbr = (int)nbr : 0;
 	return (nbr);
 }

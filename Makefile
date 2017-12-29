@@ -6,7 +6,7 @@
 #    By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/03 20:19:57 by ahrytsen          #+#    #+#              #
-#    Updated: 2017/12/28 18:56:36 by ahrytsen         ###   ########.fr        #
+#    Updated: 2017/12/29 17:30:51 by ahrytsen         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -26,7 +26,7 @@ SRC		= ft_lstpush_back.c ft_putstr.c ft_strmapi.c ft_lstpush_front.c		\
 		ft_strlen_c.c ft_lstnew.c ft_putnbr_fd.c ft_strmap.c get_next_line.c\
 		ft_printf.c ft_strextend.c ft_phendler.c ft_ultoa_base.c ft_pbuf.c	\
 		ft_strulen.c ft_atol.c ft_ltoa.c ft_wcharlen.c ft_phelper.c			\
-		ft_pfloat.c ft_dtoa.c
+		ft_pfloat.c ft_dtoa.c ft_ldtoa.c
 OBJ		= $(SRC:.c=.o)
 HDR		= libft.h ft_printf.h
 

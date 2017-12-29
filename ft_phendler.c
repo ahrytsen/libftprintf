@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 14:55:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/28 21:41:28 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/29 19:21:08 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,11 @@ inline void	ft_str(t_buf **pbuf, va_list *ap, t_arg *arg)
 	!s ? s = "(null)" : 0;
 	len = (arg->spec == 'S') || (arg->len && !ft_strcmp(arg->len, "l"))
 		? ft_strulen(s) : ft_strlen(s);
+	ft_bzero(i, sizeof(ssize_t) * 2);
 	if ((arg->spec == 'S' || (arg->len && !ft_strcmp(arg->len, "l")))
 		&& arg->is_prec && len > arg->prec && !(len = 0))
-	{
-		ft_bzero(i, sizeof(ssize_t) * 2);
 		while ((i[1] += ft_wcharlen(((int*)s)[i[0]++])) <= arg->prec)
 			len = i[1];
-	}
 	else if (arg->is_prec && len > arg->prec)
 		len = arg->prec;
 	if (arg->width < 0 || ft_strchr(arg->flags, '-'))
@@ -94,6 +92,7 @@ inline void	ft_base(t_buf **pbuf, va_list *ap, t_arg *arg)
 	tmp[0] = (arg->spec == 'x') ? "0x" : NULL;
 	(arg->spec == 'X') ? tmp[0] = "0X" : 0;
 	(arg->spec == 'o' || arg->spec == 'O') ? tmp[0] = "0" : 0;
+	(arg->spec == 'b') ? tmp[0] = "b" : 0;
 	(*tmp[2] == '0' || !ft_strchr(arg->flags, '#')) ? tmp[0] = NULL : 0;
 	(arg->spec == 'p') ? tmp[0] = "0x" : 0;
 	len[0] = ft_strlen(tmp[2]);

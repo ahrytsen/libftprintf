@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 19:54:49 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/28 20:22:07 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/29 17:47:43 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,6 @@ void			ft_str(t_buf **pbuf, va_list *ap, t_arg *arg);
 void			ft_int(t_buf **pbuf, va_list *ap, t_arg *arg);
 void			ft_base(t_buf **pbuf, va_list *ap, t_arg *arg);
 void			ft_undef(t_buf **pbuf, va_list *ap, t_arg *arg);
-void			ft_pfd(t_buf **pbuf, va_list *ap, t_arg *arg);
+void			ft_pfloat(t_buf **pbuf, va_list *ap, t_arg *arg);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/29 16:08:02 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/28 20:24:13 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/29 17:48:07 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ const static t_conv		g_phelper[] =
 	{"sS", &ft_str},
 	{"diD", &ft_int},
 	{"uUpxXoOb", &ft_base},
-	{"fF", &ft_pfd},
+	{"fF", &ft_pfloat},
 /*
 **	{"eE", },
 **	{"gG", },
@@ -55,7 +55,7 @@ static const char	*ft_get_format(va_list *ap, const char *format, t_arg *arg)
 	ft_bzero(arg, sizeof(t_arg));
 	while (*format)
 	{
-		if (*format && ft_strchr("#0-+ ", *format))
+		if (*format && ft_strchr("#0-+ '", *format))
 		{
 			if (!ft_strchr(arg->flags, *format) && i < 6)
 				arg->flags[i++] = *format;

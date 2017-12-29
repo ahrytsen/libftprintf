@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_dtoa.c                                          :+:      :+:    :+:   */
+/*   ft_ldtoa.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/28 14:16:42 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/29 19:18:18 by ahrytsen         ###   ########.fr       */
+/*   Created: 2017/12/29 19:22:25 by ahrytsen          #+#    #+#             */
+/*   Updated: 2017/12/29 19:22:30 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "ft_printf.h"
 
-static double	ft_round(int precision)
+static long double	ft_round(int precision)
 {
 	double	round;
 
@@ -23,7 +23,7 @@ static double	ft_round(int precision)
 	return (round * 0.5);
 }
 
-char			*ft_dtoa(double nbr, int precision, int dot)
+char				*ft_ldtoa(long double nbr, int precision, int dot)
 {
 	char	*snbr;
 	char	*remainder;
