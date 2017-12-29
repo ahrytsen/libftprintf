@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/28 05:35:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/29 17:31:29 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/29 20:53:06 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <string.h>
 # include <sys/types.h>
 # include <sys/uio.h>
+
+# define MOD(a)(a >= 0 ? a : -a)
 
 /*
 **				ft_printf
@@ -122,5 +124,7 @@ long			ft_atol(const char *str);
 char			*ft_ltoa(long value);
 char			*ft_dtoa(double nbr, int precision, int dot);
 char			*ft_ldtoa(long double nbr, int precision, int dot);
+char			*ft_dtoea(double nbr, int precision, int dot, char c);
+char			*ft_ldtoea(long double nbr, int precision, int dot, char c);
 
 #endif

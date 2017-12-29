@@ -6,12 +6,11 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/28 14:16:42 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/29 19:18:18 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/29 22:09:25 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "ft_printf.h"
 
 static double	ft_round(int precision)
 {
@@ -30,6 +29,8 @@ char			*ft_dtoa(double nbr, int precision, int dot)
 	int		i;
 
 	nbr = nbr < 0 ? nbr - ft_round(precision) : nbr + ft_round(precision);
+	if (!precision && ((nbr - (long)nbr) >= 0.5 || (nbr - (long)nbr) <= -0.5))
+		nbr = nbr < 0 ? nbr - 1.0 : nbr + 1.0;
 	snbr = ft_ltoa((long)nbr);
 	nbr *= nbr < 0 ? -1 : 1;
 	nbr -= (long)nbr;
