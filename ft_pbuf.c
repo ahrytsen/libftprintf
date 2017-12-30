@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/16 18:18:01 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/29 17:04:58 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/30 11:08:27 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,8 @@ ssize_t	ft_print_buf(t_buf *pbuf, t_buf *pbuf_head)
 	{
 		tmp = pbuf_head->next;
 		pbuf ? write(1, pbuf_head->str, pbuf_head->len) : 0;
-		free(pbuf_head->str);
 		ret += pbuf_head->len;
-		free(pbuf_head);
+		(pbuf_head->id) ? free(pbuf_head) : 0;
 		pbuf_head = tmp;
 	}
 	return (pbuf ? ret : -1);
@@ -85,10 +84,5 @@ t_buf	*ft_newbuf(void)
 
 	if (!(new_buf = ft_memalloc(sizeof(t_buf))))
 		return (NULL);
-	if (!(new_buf->str = (char*)malloc(sizeof(char) * (size_t)PBS)))
-	{
-		free(new_buf);
-		return (NULL);
-	}
 	return (new_buf);
 }

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/29 16:08:02 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/29 21:06:30 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/30 11:09:07 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,25 +99,26 @@ int					ft_printf(const char *format, ...)
 {
 	t_arg		arg;
 	va_list		ap;
-	t_buf		*pbuf[2];
+	t_buf		pb;
+	t_buf		*pbuf;
 	int			i;
 
-	pbuf[0] = format ? ft_newbuf() : NULL;
+	ft_bzero(&pb, sizeof(t_buf));
+	pbuf = format ? &pb : NULL;
 	format ? va_start(ap, format) : 0;
-	pbuf[1] = pbuf[0];
-	while (pbuf[1] && *format)
+	while (pbuf && *format)
 		if (*format == '%' && !(i = 0))
 		{
 			format = ft_get_format(&ap, format + 1, &arg);
 			while (g_phelper[i].conv && !ft_strchr(g_phelper[i].conv, arg.spec))
 				i++;
-			(!arg.spec || !g_phelper[i].conv) ? ft_undef(&pbuf[1], &ap, &arg)
-				: g_phelper[i].ft_phelper(&pbuf[1], &ap, &arg);
+			(!arg.spec || !g_phelper[i].conv) ? ft_undef(&pbuf, &ap, &arg)
+				: g_phelper[i].ft_phelper(&pbuf, &ap, &arg);
 		}
 		else if (*format == '{')
-			ft_get_color(&format, &pbuf[1]);
+			ft_get_color(&format, &pbuf);
 		else
-			ft_putchar_buf(&pbuf[1], *format++);
+			ft_putchar_buf(&pbuf, *format++);
 	format ? va_end(ap) : 0;
-	return (ft_print_buf(pbuf[1], pbuf[0]));
+	return (ft_print_buf(pbuf, &pb));
 }

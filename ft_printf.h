@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 19:54:49 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/29 20:28:39 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2017/12/30 11:11:43 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <locale.h>
 # include "libft.h"
 
-# define PBS 8192
+# define PBS 16384
 
 typedef struct	s_len
 {
@@ -28,7 +28,7 @@ typedef struct	s_buf
 {
 	size_t			id;
 	size_t			len;
-	char			*str;
+	char			str[PBS];
 	struct s_buf	*next;
 }				t_buf;
 typedef struct	s_color
