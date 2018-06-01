@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/29 16:08:02 by ahrytsen          #+#    #+#             */
-/*   Updated: 2017/12/29 21:06:30 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/02 01:56:38 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,5 +119,7 @@ int					ft_printf(const char *format, ...)
 		else
 			ft_putchar_buf(&pbuf[1], *format++);
 	format ? va_end(ap) : 0;
-	return (ft_print_buf(pbuf[1], pbuf[0]));
+	write(1, format, ft_strlen(format));
+	return (write(1, "\n", 1));
+	//return (ft_print_buf(pbuf[1], pbuf[0]));
 }
